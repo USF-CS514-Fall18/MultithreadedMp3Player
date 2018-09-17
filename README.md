@@ -3,9 +3,11 @@ Part 1 (Functionality) Due: Sept 24, 11:59pm
 
 Part 2 (Design + GUI + additional features): Due Oct 1, 11:59pm
 
+Click on the following link to get starter code for this project: https://classroom.github.com/a/MaJO1mn_
+
 For this project, you will implement an mp3 player. You will learn:
-- How to use nested maps
-- How to do basic file processing in Java using NIO package
+- How to use TreeMap and nested maps
+- How to do basic file processing in Java using nio package
 - How to use external libraries
 - How to design your program according to principles of OOP design
 - How to integrate your program with the GUI provided by the instructor
