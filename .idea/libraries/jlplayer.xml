@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="jlplayer">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/jlplayer" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/jlplayer" recursive="false" />
+  </library>
+</component>
