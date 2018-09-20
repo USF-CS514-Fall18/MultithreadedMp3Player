@@ -37,12 +37,37 @@ public class SongCollection {
      */
     public void loadSongs(String dir) {
         // FILL IN CODE
+        // Copying from the DirectoryStreamExample.java (Karpenko's example)
+        // Gets all files and subdirectories in a given directory
 
+        Path path = Paths.get(dir); // Made a new path, arg is the String directory name
+        try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path)) {
+            for (Path file : filesList) {
+                if (!(Files.isDirectory(file))) {
+                    System.out.println("Creating song object from " + file);
+
+                    Song song = new Song(file); // Created new song object from file in FilesList
+
+                }
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open directory.");
+        }
     }
 
     // FILL IN CODE
     // Add other methods as needed - before you start coding, think of what
     // methods you want to have in this class
+
+    // Find method?
+    public Song findSongByTitle(String title) {
+
+        Song song = new Song();
+
+        // Acutally, search for song in the directory.
+        return song;
+    }
 
 
 }
