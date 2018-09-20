@@ -23,6 +23,17 @@ public class Song  {
      */
     public Song(String filename) {
         // FILL IN CODE
+        // I got this off the internet ! Just wante to save the thing but I dont think we are supposed to use it.
+        AudioFile file = AudioFileIO.read(new Files(filename)); // OK
+        // I believe we are not allowed to use File Class????!!!!!!
+
+        // Makes a new Tag object from the filename
+        // Tag object is part of the jaudiotagger library
+        Tag tag = file.getTag(); // OK
+
+        // tag contains many methods for getting items in Field...
+        String artist = tag.getFirst(FieldKey.ARTIST);
+        System.out.println(artist);
     }
 
 
