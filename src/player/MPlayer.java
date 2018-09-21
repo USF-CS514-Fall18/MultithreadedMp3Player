@@ -22,23 +22,24 @@ public class MPlayer {
         // FILL IN CODE
         else {
 
-            // Need to make a directory
+            // Get from a directory
             // String directory = new dir;
             // sc.loadSongs(directory);
             songs.loadSongs(args[0]); // args have been set to:  dir
 
             // User Input / Validation section
 
-            Scanner sc = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);
             boolean valid = true; // Made a bool to control the following do-while statement:
 
             do {
                 System.out.println("Welcome to the MP3 Player. Please enter your song title: ");
-                String songTitle = sc.nextLine();
+                String songTitle = scanner.next();
 
-                // String songTitle = answer; ??
 
-                // if (answer.findSongByTitle()) {
+
+
+                if (){
 
                     System.out.println("Song title found. Playing song...");
                     // Play method here
