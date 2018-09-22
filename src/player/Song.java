@@ -24,6 +24,7 @@ public class Song  {
     // FILL IN CODE: add instance variables
     private String title;
     private String artist;
+    // take out player - you can access it as a local variable.
     private AdvancedPlayer player; // Was it incorrect to add this additional private var? the reason was I used it in two methods...
     private String filename; // Was it incorrect to add this additional private var?
 
@@ -94,7 +95,7 @@ public class Song  {
 
     public void play() {
         // FILL IN CODE
-        // Player playa = new Player;  // using Player class of jl library http://www.javazoom.net/javalayer/docs/docs1.0/javazoom/jl/player/Player.html
+        Player player = new Player;  // using Player class of jl library http://www.javazoom.net/javalayer/docs/docs1.0/javazoom/jl/player/Player.html
         // Needs to take a stream
 
         try {
@@ -118,6 +119,11 @@ public class Song  {
      */
     public String getArtist() {
         return artist;
+    }
+
+    public static void main(String[] args) {
+        Song s = new Song("/Users/liv/IdeaProjects/lab2-liv-yaa/songs/SFW40517_06.mp3");
+        System.out.println(s);
     }
 
 }
