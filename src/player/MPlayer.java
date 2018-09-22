@@ -37,9 +37,7 @@ public class MPlayer {
                 String songTitle = scanner.next();
 
 
-
-
-                if (){
+                if (// Found song title){
 
                     System.out.println("Song title found. Playing song...");
                     // Play method here
