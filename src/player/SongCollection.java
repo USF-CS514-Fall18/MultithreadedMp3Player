@@ -63,6 +63,25 @@ public class SongCollection {
 
     // FILL IN CODE: Add other methods as needed - before you start coding, think of what methods you want to have in this class
 
+    /** @param str String
+     * @return Song that the title corresponds to.
+     * */
+    public Song getSong(String str) {
+
+        Song res = null;
+
+        for (Map<String, Song> val: songs.values()) {
+            for (Map.Entry<String, Song> entry: val.entrySet()) {
+                if (entry.getKey().matches(str)) {
+                    res = entry.getValue();
+                }
+            }
+        }
+        return res;
+
+    }
+
+
     /** @return String representation of SongCollection
      * */
     public String toString() {
