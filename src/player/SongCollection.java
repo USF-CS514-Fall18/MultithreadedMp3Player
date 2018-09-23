@@ -1,15 +1,14 @@
 package player;
 
+import apple.laf.JRSUIUtils;
+
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,22 +37,18 @@ public class SongCollection {
 
     }
 
-    /** Finds all .mp3 files in a given directory, creates Songs from them
-     * and adds them to this collection
-     * Note you are not allowed to use class File; You are required to use
-     * classes from nio package we discussed in class.
+    /** Finds all .mp3 files in a given directory, creates Songs from them and adds them to this collection
+     * Note you are not allowed to use class File; You are required to use classes from nio package we discussed in class.
      * @param dir Name of the project directory that contains mp3 files
      *
-     *            They should be in order of artist (key)
+     * They should be in order of artist (key)
      */
     public void loadSongs(String dir) {
         // FILL IN CODE
         // Copying from the DirectoryStreamExample.java and PathExample.java(Karpenko's examples)
         // Gets all files and subdirectories in a given directory
-        String out = "";
 
         String currPath = "dir";
-        System.out.println("Info about " + currPath);
         Path path = Paths.get(currPath); // Made a new path, arg is the String directory name
 
         try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path.toAbsolutePath())) {
@@ -61,37 +56,36 @@ public class SongCollection {
             for (Path file : filesList)
                 if (!(Files.isDirectory(file))) { // Found the file in the dir
 
-                    System.out.println("Creating song object from " + file.toString());
-
-
                     Song song = new Song(file.toString()); // Song(String filename)
+                    // System.out.println("Song object created " + song.getTitle() + " by " + song.getArtist());
 
+                    TreeMap<String, Song> titleSongMap = new TreeMap<String, Song>();
+                    titleSongMap.put(song.getTitle(), song);
 
-                    System.out.println("Song object created " + song.getTitle() + " by " + song.getArtist());
+                    songs.put(song.getArtist(), titleSongMap);
 
-                    //song.play();// works
-
-
-////                    // Add song object to the collection (TreeMap):
-////                    // First we want to find all songs with given artist and make a Map<String, Song>:
-////                    // Made a new Map to store Title, Song:
-////                    // Map<String, Song> titleSongMap = new Map<String, Song>;
-////                    //titleSongMap.put(song.getTitle(), song);
-////
-////                    // This should be at a higher level
-////                    //songs.put(song.getArtist(), titleSongMap);
-//
                 }
         }
         catch (IOException e) {
             System.out.println("Cannot open directory.");
         }
 
+        System.out.println("Key set: " + songs.keySet());
+        System.out.println("Entry set: " + songs.entrySet());
 
-        //System.out.println(out);
     }
 
     // FILL IN CODE: Add other methods as needed - before you start coding, think of what methods you want to have in this class
+
+    /** @param str1 String
+     * @param str2 String
+     * @return 0 if strings are equal, negative int if str2 > str1, and positive int if str1 > str2.
+     * I made this - OS
+     * */
+    public int compareStr(String str1, String str2) {
+        return str1.compareTo(str2);
+
+    }
 
      /** @param title title of the song
      * @return reference to the Song with the given title
@@ -156,28 +150,3 @@ public class SongCollection {
                 '}';
     }
 }
-
-
-//  Copied from Karpenko - printPathInformation(path);
-//
-//        currPath = ".";
-//        System.out.println("Info about " + currPath);
-//        Path relativeDir = Paths.get(currPath); // Made a new path, arg is the String directory name
-//        printPathInformation(relativeDir);
-//
-//
-//        Path absoluteDir = relativeDir.toAbsolutePath(); // Made a new path, arg is the String directory name
-//        System.out.println("Info about " + absoluteDir);
-//        printPathInformation(relativeDir);
-//
-//        // combine paths together
-//        Path srcDirectory = Paths.get(".", "dir/Stylo.mp3");
-//        printPathInformation(srcDirectory);
-//
-//        // canonical path
-//        Path path2 = Paths.get("./dir/././Stylo.mp3");
-//        System.out.println("Absolute path: " + path2.toAbsolutePath());
-//        Path canonicalPath = path.toAbsolutePath().normalize();
-//        printPathInformation(canonicalPath);
-//
-//*/
