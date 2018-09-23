@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /** SongCollection class stores all the songs in a nested TreeMap (see below),
  *  and has methods to manipulate songs.
  *
@@ -22,12 +27,7 @@ import java.util.TreeMap;
  */
 
 
-// For first draft, I am going to add some methods similar to the LibraryCatalog class
-
 public class SongCollection {
-
-    // In a TreeMap, each key is the name of the artist, and the value is a nested TreeMap, where each key
-    // is the title of the song written by this artist, and the value is the reference to the corresponding Song.
     private Map<String, Map<String, Song>> songs;
 
 
@@ -48,44 +48,72 @@ public class SongCollection {
      */
     public void loadSongs(String dir) {
         // FILL IN CODE
-        // Copying from the DirectoryStreamExample.java (Karpenko's example)
+        // Copying from the DirectoryStreamExample.java and PathExample.java(Karpenko's examples)
         // Gets all files and subdirectories in a given directory
+        String out = "";
+///**
+//        String currPath = "dir";
+//        System.out.println("Info about " + currPath);
+//        Path path = Paths.get(currPath); // Made a new path, arg is the String directory name
+//        printPathInformation(path);
+//
+//        currPath = ".";
+//        System.out.println("Info about " + currPath);
+//        Path relativeDir = Paths.get(currPath); // Made a new path, arg is the String directory name
+//        printPathInformation(relativeDir);
+//
+//
+//        Path absoluteDir = relativeDir.toAbsolutePath(); // Made a new path, arg is the String directory name
+//        System.out.println("Info about " + absoluteDir);
+//        printPathInformation(relativeDir);
+//
+//        // combine paths together
+//        Path srcDirectory = Paths.get(".", "dir/Stylo.mp3");
+//        printPathInformation(srcDirectory);
+//
+//        // canonical path
+//        Path path2 = Paths.get("./dir/././Stylo.mp3");
+//        System.out.println("Absolute path: " + path2.toAbsolutePath());
+//        Path canonicalPath = path.toAbsolutePath().normalize();
+//        printPathInformation(canonicalPath);
+//
+//*/
 
-        Path path = Paths.get(dir); // Made a new path, arg is the String directory name
-        try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path)) {
-            for (Path file : filesList) {
-                if (!(Files.isDirectory(file))) { // Found the file in the dir
-                    System.out.println("Creating song object from " + file.toString());
+//        try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path)) {
+//
+//            for (Path file : filesList)
+//                if (!(Files.isDirectory(file))) { // Found the file in the dir
+//
+//                    System.out.println("Creating song object from " + file.getFileName());
+//
+//
+//                    //Song song = new Song(file); // Song(String filename)
+////                    out += song.toString();
+////
+////                    //System.out.println("Song object created " + song.toString());
+////
+//
+//
+////                    // Add song object to the collection (TreeMap):
+////                    // First we want to find all songs with given artist and make a Map<String, Song>:
+////                    // Made a new Map to store Title, Song:
+////                    // Map<String, Song> titleSongMap = new Map<String, Song>;
+////                    //titleSongMap.put(song.getTitle(), song);
+////
+////                    // This should be at a higher level
+////                    //songs.put(song.getArtist(), titleSongMap);
+//
+//                }
+//        }
+//        catch (IOException e) {
+//            System.out.println("Cannot open directory.");
+//        }
 
-                    // Trying to create new Path object from file in FilesList
-                    // This was a wonky way to make it become a string but I want to double check it
-                    Song song = new Song(file.getFileName().toString()); // Song(String filename)
 
-                    System.out.println("Song object created " + song.toString());
-
-                    // Add song object to the collection (TreeMap):
-                    // First we want to find all songs with given artist and make a Map<String, Song>:
-                    // Made a new Map to store Title, Song:
-                    Map<String, Song> titleSongMap = new Map<String, Song>;
-                    titleSongMap.put(song.getTitle(), song);
-
-                    // This should be at a higher level
-                    songs.put(song.getArtist(), titleSongMap);
-
-
-
-
-                }
-            }
-        }
-        catch (IOException e) {
-            System.out.println("Cannot open directory.");
-        }
+        System.out.println(out);
     }
 
-    // FILL IN CODE
-    // Add other methods as needed - before you start coding, think of what
-    // methods you want to have in this class
+    // FILL IN CODE: Add other methods as needed - before you start coding, think of what methods you want to have in this class
 
      /** @param title title of the song
      * @return reference to the Song with the given title
@@ -94,13 +122,12 @@ public class SongCollection {
       * I made this - OS
       * */
     public Song findSongTitle(String title) {
-
-        for (Song s: songs) {
-            if (s.getTitle().equals(title)) {
-                return s;
-            }
-        }
-        // If we cannot find song,
+//        for (Song s: songs) {
+//            if (s.getTitle().equals(title)) {
+//                return s;
+//            }
+//        }
+//        // If we cannot find song,
         return null;
     }
 
@@ -111,13 +138,43 @@ public class SongCollection {
      * I made this - OS
      * */
     public Song findSongArtist(String artist) {
-        for (Song s: songs) {
-            if (s.getArtist().equals(artist)) {
-                return s;
-            }
-        }
+//        for (Song s: songs) {
+//            if (s.getArtist().equals(artist)) {
+//                return s;
+//            }
+//        }
         // If we cannot find song,
         return null;
     }
 
+    /** @param path is the current path
+     *
+     * Nearly identical to Karpenko's example PathExample.java
+     * I added this - OS
+     * */
+    public static void printPathInformation(Path path) {
+        System.out.println("Path, toString: " + path.toString());
+        System.out.println("Path Parent " + path.getParent());
+        System.out.println("Path Root: " + path.getRoot());
+        System.out.println("Path Filename: " + path.getFileName());
+
+        try {
+            System.out.println("Size of Files: " + Files.size(path));
+            System.out.println("Owner of Files: " + Files.getOwner(path));
+            System.out.println("Does Files exist? " + Files.exists(path));
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println();
+    }
+
+    /** @return String representation of SongCollection
+     * */
+    public String toString() {
+        return "SongCollection{" +
+                "songs=" + songs +
+                '}';
+    }
 }
