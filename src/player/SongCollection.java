@@ -56,30 +56,45 @@ public class SongCollection {
             System.out.println("Cannot open directory.");
         }
 
-        System.out.println("Key set: " + songs.keySet());
-        System.out.println(songs.toString());
+//        System.out.println("Key set: " + songs.keySet());
+//        System.out.println(songs.toString());
 
     }
 
     // FILL IN CODE: Add other methods as needed - before you start coding, think of what methods you want to have in this class
 
-    /** @param str String
+    /** @param name String representation of the artist
+     * @return map entry that the title corresponds to.
+     * */
+    public String getArtistSongs(String name) {
+        String res = "";
+
+        for (String artist: songs.keySet()) {
+            if (artist.matches(name)) {
+                res = artist;
+            }
+        }
+
+        return res;
+    }
+
+    /** @param title String representation of the title
      * @return Song that the title corresponds to.
      * */
-    public Song getSong(String str) {
+    public Song getSong(String title) {
 
         Song res = null;
 
         for (Map<String, Song> val: songs.values()) {
             for (Map.Entry<String, Song> entry: val.entrySet()) {
-                if (entry.getKey().matches(str)) {
+                if (entry.getKey().matches(title)) {
                     res = entry.getValue();
                 }
             }
         }
         return res;
-
     }
+
 
 
     /** @return String representation of SongCollection
