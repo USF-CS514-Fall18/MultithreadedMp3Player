@@ -51,49 +51,27 @@ public class SongCollection {
         // Copying from the DirectoryStreamExample.java and PathExample.java(Karpenko's examples)
         // Gets all files and subdirectories in a given directory
         String out = "";
-///**
-//        String currPath = "dir";
-//        System.out.println("Info about " + currPath);
-//        Path path = Paths.get(currPath); // Made a new path, arg is the String directory name
-//        printPathInformation(path);
-//
-//        currPath = ".";
-//        System.out.println("Info about " + currPath);
-//        Path relativeDir = Paths.get(currPath); // Made a new path, arg is the String directory name
-//        printPathInformation(relativeDir);
-//
-//
-//        Path absoluteDir = relativeDir.toAbsolutePath(); // Made a new path, arg is the String directory name
-//        System.out.println("Info about " + absoluteDir);
-//        printPathInformation(relativeDir);
-//
-//        // combine paths together
-//        Path srcDirectory = Paths.get(".", "dir/Stylo.mp3");
-//        printPathInformation(srcDirectory);
-//
-//        // canonical path
-//        Path path2 = Paths.get("./dir/././Stylo.mp3");
-//        System.out.println("Absolute path: " + path2.toAbsolutePath());
-//        Path canonicalPath = path.toAbsolutePath().normalize();
-//        printPathInformation(canonicalPath);
-//
-//*/
 
-//        try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path)) {
-//
-//            for (Path file : filesList)
-//                if (!(Files.isDirectory(file))) { // Found the file in the dir
-//
-//                    System.out.println("Creating song object from " + file.getFileName());
-//
-//
-//                    //Song song = new Song(file); // Song(String filename)
-////                    out += song.toString();
-////
-////                    //System.out.println("Song object created " + song.toString());
-////
-//
-//
+        String currPath = "dir";
+        System.out.println("Info about " + currPath);
+        Path path = Paths.get(currPath); // Made a new path, arg is the String directory name
+
+        try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path.toAbsolutePath())) {
+
+            for (Path file : filesList)
+                if (!(Files.isDirectory(file))) { // Found the file in the dir
+
+                    System.out.println("Creating song object from " + file.toString());
+
+
+                    Song song = new Song(file.toString()); // Song(String filename)
+
+
+                    System.out.println("Song object created " + song.getTitle() + " by " + song.getArtist());
+
+                    //song.play();// works
+
+
 ////                    // Add song object to the collection (TreeMap):
 ////                    // First we want to find all songs with given artist and make a Map<String, Song>:
 ////                    // Made a new Map to store Title, Song:
@@ -103,14 +81,14 @@ public class SongCollection {
 ////                    // This should be at a higher level
 ////                    //songs.put(song.getArtist(), titleSongMap);
 //
-//                }
-//        }
-//        catch (IOException e) {
-//            System.out.println("Cannot open directory.");
-//        }
+                }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open directory.");
+        }
 
 
-        System.out.println(out);
+        //System.out.println(out);
     }
 
     // FILL IN CODE: Add other methods as needed - before you start coding, think of what methods you want to have in this class
@@ -178,3 +156,28 @@ public class SongCollection {
                 '}';
     }
 }
+
+
+//  Copied from Karpenko - printPathInformation(path);
+//
+//        currPath = ".";
+//        System.out.println("Info about " + currPath);
+//        Path relativeDir = Paths.get(currPath); // Made a new path, arg is the String directory name
+//        printPathInformation(relativeDir);
+//
+//
+//        Path absoluteDir = relativeDir.toAbsolutePath(); // Made a new path, arg is the String directory name
+//        System.out.println("Info about " + absoluteDir);
+//        printPathInformation(relativeDir);
+//
+//        // combine paths together
+//        Path srcDirectory = Paths.get(".", "dir/Stylo.mp3");
+//        printPathInformation(srcDirectory);
+//
+//        // canonical path
+//        Path path2 = Paths.get("./dir/././Stylo.mp3");
+//        System.out.println("Absolute path: " + path2.toAbsolutePath());
+//        Path canonicalPath = path.toAbsolutePath().normalize();
+//        printPathInformation(canonicalPath);
+//
+//*/
