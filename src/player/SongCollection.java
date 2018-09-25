@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.sql.SQLOutput;
 import java.util.*;
 
+
 /** SongCollection class stores all the songs in a nested TreeMap (see below),
  *  and has methods to manipulate songs.
  *
@@ -39,16 +40,23 @@ public class SongCollection {
 
         Path path = Paths.get(dir); // Made a new path, arg is the String directory name
 
+
         try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path.toAbsolutePath())) {
 
             for (Path file : filesList)
                 if (!(Files.isDirectory(file))) { // Found the file in the dir
 
-                    Song song = new Song(file.toString()); // Song(String filename)
-                    TreeMap<String, Song> titleSongMap = new TreeMap<String, Song>();
-                    titleSongMap.put(song.getTitle(), song);
+                    if (isMP3(file.toString())) {
+                        // File is an mp3. Adding to search directory
+                        Song song = new Song(file.toString()); // Song(String filename)
+                        TreeMap<String, Song> titleSongMap = new TreeMap<String, Song>();
+                        titleSongMap.put(song.getTitle(), song);
 
-                    songs.put(song.getArtist(), titleSongMap);
+                        songs.put(song.getArtist(), titleSongMap);
+                    }
+                    else {
+                        System.out.println("Note: Found a file " + file.toString() + " that is not an mp3. Not added to search directory. ");
+                    }
 
                 }
         }
@@ -103,6 +111,25 @@ public class SongCollection {
         return "SongCollection{" +
                 "songs=" + songs +
                 '}';
+    }
+
+    /** File extension checker
+     * @param filename is the filename
+     * @return boolean whether the filename extension is "mp3"
+     * */
+    public boolean isMP3(String filename) {
+        boolean res = false;
+        String outString = "";
+
+        if (filename.contains(".")) {
+            outString += filename.substring(filename.lastIndexOf(".") + 1);
+        }
+
+        if (outString.matches("mp3")) {
+            res = true;
+        }
+
+        return res;
     }
 }
 
