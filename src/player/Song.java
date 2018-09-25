@@ -3,16 +3,12 @@ package player;
 // Imports related to jaudiotagger and jl libraries
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
-import javazoom.jl.player.advanced.AdvancedPlayer;
 import org.jaudiotagger.audio.*;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.*;
-
 import java.io.*;
-import java.nio.file.Files;
-// is java.nio is preferred for this project? Contains Path, Paths, Files, FileSystem, DirectorySystem...
 
 
 /** Class Song - represents a song in the SongCollection.
@@ -35,22 +31,13 @@ public class Song  {
         // FILL IN CODE
         this.filename = filename;
 
-        // Src :::: https://www.programcreek.com/java-api-examples/?api=org.jaudiotagger.audio.AudioFile
-
         try {
-
-            File ioFile = new File(filename);
-
-
-            AudioFile audioFile = AudioFileIO.read(ioFile);
+            File f = new File(filename);
+            AudioFile audioFile = AudioFileIO.read(f);
             Tag tag = audioFile.getTag();
 
             title = tag.getFirst(FieldKey.TITLE);
             artist = tag.getFirst(FieldKey.ARTIST);
-
-//            // https://stackoverflow.com/questions/26946826/use-jlayer-to-play-mp3-resource
-//            FileInputStream fis = new FileInputStream(filename);
-//            // player = new AdvancedPlayer(fis);
 
         } catch ( IOException | TagException | CannotReadException | ReadOnlyFileException | InvalidAudioFrameException e) {
             System.out.println("Some exception occurred when reading from file.");
@@ -58,8 +45,7 @@ public class Song  {
         }
     }
 
-    /** Returns a string representation of the Song: title and artist separated
-     * by " by ", for instance: Hot N Cold by Katy Perry
+    /** Returns a string representation of the Song: title and artist separated by " by ", for instance: Hot N Cold by Katy Perry
      * @return string representing the song
      */
     public String toString() {
@@ -83,11 +69,15 @@ public class Song  {
         // FILL IN CODE
 
         try {
-            FileInputStream fis = new FileInputStream(filename);
-            BufferedInputStream bis = new BufferedInputStream(fis);
+            FileInputStream fStream = new FileInputStream(filename);
+            BufferedInputStream bStream = new BufferedInputStream(fStream);
 
-            Player player = new Player(bis);
+            Player player = new Player(bStream);
             player.play();
+
+            if (player.isComplete()) {
+                stopPlaying(player);
+            }
 
         } catch (JavaLayerException | FileNotFoundException e) {
             e.printStackTrace();
@@ -110,11 +100,9 @@ public class Song  {
         return artist;
     }
 
-    public static void main(String[] args) {
-        Song s = new Song("dir/Jai Paul - BTSTU (Edit).mp3");
-        System.out.println(s);
-
-        s.play();
+    /** Stop player
+     */
+    public void stopPlaying(Player player) {
+        player.close();
     }
-
 }
