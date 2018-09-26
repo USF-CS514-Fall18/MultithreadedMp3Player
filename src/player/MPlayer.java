@@ -1,5 +1,6 @@
 package player;
 
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -34,21 +35,31 @@ public class MPlayer {
                 String artistName = scanner.next();
 
                 try {
+                    if (songs.searchForArtistName(artistName) == true) {
 
-                    songs.getArtistSongs(artistName);
+                        Map<String, Song> artistSet = songs.getArtistSet(artistName); // Create new variable to search through
+                        // songs.toString(); This is still a work in progress
 
-                    System.out.println("Please enter your song title: ");
-                    String songTitle = scanner.next();
+                        // Now, search for the song:
+                        System.out.println("Artist found. Please enter the song name: ");
+                        String songName = scanner.next();
+                        if (artistSet.searchForSongName(songName, artistSet) == true) {
 
 
-                    try {
-                        songs.getSong(songTitle).play();
-                    } catch (NullPointerException e) {
-                        System.out.println("Cannot find song. Please try again. ");
+                            try {
+                                Song foundSong = 
+                                System.out.println("Playing song. ");
+                                foundSong.play();
+                            } catch (NullPointerException e) {
+                                System.out.println("Cannot play song.");
+                            }
+
+                        } else {
+                            System.out.println("Song not found. try again...");
+                        }
+                    } else {
+                        System.out.println("Artist not found. Try again...");
                     }
-
-                } catch (NullPointerException e) {
-                    System.out.println("Cannot find artist. Please try again. ");
                 }
 
             } while (valid);
