@@ -40,77 +40,123 @@ public class SongCollection {
 
         Path path = Paths.get(dir); // Made a new path, arg is the String directory name
 
-
         try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path.toAbsolutePath())) {
 
-            for (Path file : filesList)
+            for (Path file : filesList) {
                 if (!(Files.isDirectory(file))) { // Found the file in the dir
 
                     if (isMP3(file.toString())) {
-                        // File is an mp3. Adding to search directory
+                        // If file is an mp3, add it to search directory
                         Song song = new Song(file.toString()); // Song(String filename)
                         TreeMap<String, Song> titleSongMap = new TreeMap<String, Song>();
                         titleSongMap.put(song.getTitle(), song);
 
                         songs.put(song.getArtist(), titleSongMap);
-                    }
-                    else {
+                    } else {
                         System.out.println("Note: Found a file " + file.toString() + " that is not an mp3. Not added to search directory. ");
                     }
-
                 }
+            }
         }
         catch (IOException e) {
             System.out.println("Cannot open directory.");
         }
-
-//        System.out.println("Key set: " + songs.keySet());
-//        System.out.println(songs.toString());
-
     }
 
     // FILL IN CODE: Add other methods as needed - before you start coding, think of what methods you want to have in this class
-
-    /** @param name String representation of the artist
-     * @return map entry that the title corresponds to.
+    /** @param artistName String representation of the artist name
+     * @return  boolean whether search string is in the dir.
+     * (Outer level search - keys are artist names)
      * */
-    public String getArtistSongs(String name) {
-        String res = "";
+    public boolean searchForArtistName(String artistName) {
+        boolean res = false;
 
-        for (String artist: songs.keySet()) {
-            if (artist.matches(name)) {
-                res = artist;
+        for (String name : songs.keySet()) {
+            if (name.matches(artistName)) {
+                res = true;
+                System.out.println(res);
             }
         }
-
         return res;
     }
 
-    /** @param title String representation of the title
-     * @return Song that the title corresponds to.
+    /** @param artistName String representation of the artist name
+     * @return map entry that the artist name corresponds to.
+     * (Outer level search - keys are artist names, values are TreeMaps<String, Song>)
      * */
-    public Song getSong(String title) {
+    public Map<String, Song> getArtistSet(String artistName) {
+        Map<String, Song> res = null;
 
+        for (String name : songs.keySet()) {
+            if (name.matches(artistName)) {
+                res = songs.get(artistName);
+                System.out.println(res.toString());
+            }
+        }
+        return res;
+    }
+
+
+    /** @param songName String representation of the song name
+     * @return boolean whether search string is in the dir.
+     * (Inner level search - keys are song names, values are Map objects)
+     * */
+    public boolean searchForSongName(String songName, Map<String, Song> songSet) {
+        boolean res = false;
+
+        for (String sn : songSet.keySet()) {
+            if (sn.matches(songName)) {
+                res = true;
+                System.out.println(res);
+            }
+        }
+        return res;
+    }
+
+    /** @param songName String representation of the song name
+     * @param songSet the inner Map that we are looking for (now that we know the artist)
+     * @return Song object that the song name corresponds to.
+     * (Inner level search - keys are song names, values are Map objects)
+     * */
+    public Song getSong(String songName, Map<String, Song> songSet) {
         Song res = null;
 
-        for (Map<String, Song> val: songs.values()) {
-            for (Map.Entry<String, Song> entry: val.entrySet()) {
-                if (entry.getKey().matches(title)) {
-                    res = entry.getValue();
-                }
+        for (String sn : songSet.keySet()) {
+            if (sn.matches(songName)) {
+                res = songSet.get(songName);
+                System.out.println(res.toString());
             }
         }
+
         return res;
     }
 
-
+//    /** @param title String representation of the title
+//     * @return Song that the title corresponds to.
+//     * */
+//    public Song getSong(String title) {
+//
+//        Song res = null;
+//
+//        for (Map<String, Song> val: songs.values()) {
+//            for (Map.Entry<String, Song> entry: val.entrySet()) {
+//                if (entry.getKey().matches(title)) {
+//                    res = entry.getValue();
+//                }
+//            }
+//        }
+//        return res;
+//    }
 
     /** @return String representation of SongCollection
+     * WOrk in progress...
      * */
     public String toString() {
-        return "SongCollection{" +
-                "songs=" + songs +
-                '}';
+        String res = "";
+        for (int artists=0; artists < songs.keySet().size(); artists++) {
+            res += songs.get(artists) + " ";
+        }
+        return res;
     }
 
     /** File extension checker
