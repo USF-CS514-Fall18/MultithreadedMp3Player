@@ -38,15 +38,8 @@ public class SongCollection {
         // FILL IN CODE - Largely Copying from the DirectoryStreamExample.java and PathExample.java(Karpenko's examples)
         // Gets all files and subdirectories in a given directory
 
-        // Make a new nested treemap:
-
-
         Path path = Paths.get(dir); // Made a new path, arg is the String directory name
-
         try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path.toAbsolutePath())) {
-
-//            TreeMap<String, TreeMap<String, Song>> bigMap = new TreeMap<>();
-//            System.out.println(bigMap);
 
             for (Path file : filesList) {
                 if (!(Files.isDirectory(file))) { // Found the file in the dir
@@ -57,35 +50,20 @@ public class SongCollection {
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
 
-
                         if (songs.containsKey(newSong.getArtist())) {
-                            // Artist has already been added.
-                            // So there is a corresponding TreeMap value in the map.
-                            // System.out.println("Artist " + newSongArtist + " has already been added. ");
+                            // Artist has already been added. Add new entry to existing "small" map.
                             Map<String, Song> smallMap = songs.get(newSongArtist);
                             smallMap.put(newSongTitle, newSong);
 
-//                            for (Song song : smallMap.values()) {
-//                                System.out.print(song.getTitle() + ", ");
-//                            }
-//                            System.out.println();
-
                         }
                         else {
-                            // Artist has not yet been added.
-                            // So make a new TreeMap value and add they key:value to the map.
-
-                            //System.out.println("Artist has not yet been added. ");
+                            // Artist has not yet been added. So make a new small TreeMap and add new entry to it.
                             TreeMap<String, Song> smallMap = new TreeMap<>();
-
                             smallMap.put(newSongTitle, newSong);
                             songs.put(newSongArtist, smallMap);
 
                         }
 
-
-                    } else {
-                        System.out.println("Note: Found a file " + file.toString() + " that is not an mp3. Not added to search directory. ");
                     }
                 }
             }
@@ -109,8 +87,8 @@ public class SongCollection {
     }
 
     /** @param artistName String representation of the artist name
-     * @return map entry that the artist name corresponds to.
-     * (Outer level search - keys are artist names, values are TreeMaps<String, Song>)
+     * @return Map<String, Song> object - the map entry that the artist name corresponds to
+     * (Outer level search - keys are artist names, values are "small" maps)
      * */
     public Map<String, Song> getArtistSet(String artistName) {
         Map<String, Song> res = null;
@@ -123,35 +101,28 @@ public class SongCollection {
         return res;
     }
 
-
     /** @param title String representation of the song title
-     * @param songSet the inner Map that we are looking for (now that we know the artist)
-     * @return Song object that the song name corresponds to.
-     * (Inner level search - keys are song names, values are Map objects)
+     * @param songSet the "small" Map object that we are looking through (now that we know the artist)
+     * @return Song object that the title corresponds to.
+     * (Inner level search - keys are titles, values are Song objects)
      * */
     public Song getSong(String title, Map<String, Song> songSet) {
         Song res = null;
 
         for (String t : songSet.keySet()) {
             if (t.matches(title)) {
-                res = songSet.get(title); // Hopefully grabs a Song object
-
-                System.out.println(res.toString());
+                res = songSet.get(title);
             }
         }
-
         return res;
     }
+
     /** @param title String representation of the title
      * @return boolean if the song is found.
      * */
     public boolean getSongBool(String title, Map<String, Song> songSet) {
 
         boolean res = false;
-
-        if (title.matches("")) {
-            return res;
-        }
 
         for (String t : songSet.keySet()) {
             if (t.matches(title)) {
@@ -162,26 +133,20 @@ public class SongCollection {
     }
 
     /** @return String representation of SongCollection
-     *
      * */
     public String toString() {
         String res = "";
 
-
         for (Map.Entry<String, Map<String, Song>> artistEntry : songs.entrySet()) {
-
-            String artist = artistEntry.getKey().toString();
-
+            String artist = artistEntry.getKey();
             res += artist + ": \n";
 
             for (Map.Entry<String, Song> titleEntry : artistEntry.getValue().entrySet()) {
-
                 String title = titleEntry.getKey();
                 res +=  " - " + title + "\n";
             }
             res += "\n";
         }
-
         return res;
     }
 
