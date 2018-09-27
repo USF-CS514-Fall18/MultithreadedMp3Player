@@ -50,7 +50,6 @@ public class Song  {
      */
     public String toString() {
         // FILL IN CODE
-
         String res = title + " by " + artist;
         return res;
     }
@@ -67,7 +66,6 @@ public class Song  {
 
     public void play() {
         // FILL IN CODE
-
         try {
             FileInputStream fStream = new FileInputStream(filename);
             BufferedInputStream bStream = new BufferedInputStream(fStream);
@@ -82,9 +80,8 @@ public class Song  {
         } catch (JavaLayerException | FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
-
+    
     /** Feel free to add other methods as needed */
 
     /** Return the title of the song - I added this - OS
@@ -100,10 +97,10 @@ public class Song  {
         return artist;
     }
 
-    /** Stop player
+    /** Stops playing the song
+     * @param player the Player object
      */
     public void stopPlaying(Player player) {
         player.close();
     }
-    
 }
