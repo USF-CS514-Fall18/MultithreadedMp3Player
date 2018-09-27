@@ -29,6 +29,9 @@ public class MPlayer {
             Scanner scanner = new Scanner(System.in);
             boolean valid = true; // Made a bool to control the following do-while statement:
 
+            System.out.println(songs.getClass());
+            System.out.println("To string: " + songs.toString());
+
             do {
                 System.out.println("Please enter the artist name: ");
                 String artistName = scanner.nextLine();
@@ -46,7 +49,7 @@ public class MPlayer {
 
                     // Now, search for the song:
                     System.out.println("Please enter the song name: ");
-                    
+
                     boolean askForSong = false;
 
                     do {
