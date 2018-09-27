@@ -124,68 +124,28 @@ public class SongCollection {
     }
 
 
-    /** @param songName String representation of the song name
-     * @return boolean whether search string is in the dir.
+    /** @param title String representation of the song title
+     * @param songSet the inner Map that we are looking for (now that we know the artist)
+     * @return Song object that the song name corresponds to.
      * (Inner level search - keys are song names, values are Map objects)
      * */
-    public boolean searchForSong(String songName, Map<String, Song> songSet) {
-        boolean res = true;
-
-//        for (String sn : songSet.keySet()) {
-//            if (sn.matches(songName)) {
-//                res = true;
-//                System.out.println(res);
-//            }
-//        }
-
-        // if (songSet.containsKey(songName)) res = true;
-
-        return res;
-    }
-
-//    /** @param songName String representation of the song name
-//     * @param songSet the inner Map that we are looking for (now that we know the artist)
-//     * @return Song object that the song name corresponds to.
-//     * (Inner level search - keys are song names, values are Map objects)
-//     * */
-//    public Song getSong(String songName, Map<String, Song> songSet) {
-//        Song res = null;
-//
-////        for (String sn : songSet.keySet()) {
-////            if (sn.matches(songName)) {
-////                res = songSet.keySet().get(songName);
-////                System.out.println(res.toString());
-////            }
-////        }
-//
-//        return res;
-//    }
-
-    /** @param title String representation of the title
-     * @return Song that the title corresponds to.
-     * */
-    public Song getSong(String title) {
-
+    public Song getSong(String title, Map<String, Song> songSet) {
         Song res = null;
 
-        if (title.matches("")) {
-            return res;
-        }
+        for (String t : songSet.keySet()) {
+            if (t.matches(title)) {
+                res = songSet.get(title); // Hopefully grabs a Song object
 
-        for (Map<String, Song> val: songs.values()) {
-            for (Map.Entry<String, Song> entry: val.entrySet()) {
-                if (entry.getKey().matches(title)) {
-                    res = entry.getValue();
-                }
+                System.out.println(res.toString());
             }
         }
+
         return res;
     }
-
     /** @param title String representation of the title
      * @return boolean if the song is found.
      * */
-    public boolean getSongBool(String title) {
+    public boolean getSongBool(String title, Map<String, Song> songSet) {
 
         boolean res = false;
 
@@ -193,18 +153,16 @@ public class SongCollection {
             return res;
         }
 
-        for (Map<String, Song> val: songs.values()) {
-            for (Map.Entry<String, Song> entry: val.entrySet()) {
-                if (entry.getKey().matches(title)) {
-                    res = true;
-                }
+        for (String t : songSet.keySet()) {
+            if (t.matches(title)) {
+                res = true;
             }
         }
         return res;
     }
 
     /** @return String representation of SongCollection
-     * WOrk in progress...
+     *
      * */
     public String toString() {
         String res = "";
