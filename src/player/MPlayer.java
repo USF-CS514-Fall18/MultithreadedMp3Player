@@ -25,72 +25,69 @@ public class MPlayer {
         else {
             songs.loadSongs(args[0]); // args have been set to:  dir
             Scanner scanner = new Scanner(System.in);
-            boolean valid = true; // Made a bool to control the following do-while statement:
+            // boolean valid = true; // Made a bool to control the following do-while statement:
 
 
-            do {
-                System.out.println("Welcome to the MP3 Player. Please enter the artist name: ");
-                String artistName = scanner.nextLine();
+            System.out.println("Welcome to the MP3 Player. Please enter the artist name: ");
+            String artistName = scanner.nextLine();
 
 
-                if (songs.searchForArtistName(artistName)) { // If artist exists...
+            if (songs.searchForArtistName(artistName)) { // If artist exists...
 
-                    Map<String, Song> artistSet = songs.getArtistSet(artistName); // Create new variable to search through
+                Map<String, Song> artistSet = songs.getArtistSet(artistName); // Create new variable to search through
 
-                    System.out.println(artistSet.toString());
-                    System.out.println("key set: "+ artistSet.keySet());
-                    System.out.println("entry set: " + artistSet.entrySet());
-
-
-                    // Now, search for the song:
-                    System.out.println("Artist found. Please enter the song name: ");
-
-                    boolean isValid = false;
+                System.out.println(artistSet.toString());
+                System.out.println("key set: " + artistSet.keySet());
+                System.out.println("entry set: " + artistSet.entrySet());
 
 
-                    do {
+                // Now, search for the song:
+                System.out.println("Artist found. Please enter the song name: ");
 
-                        String songName = scanner.nextLine();
-                        isValid = songs.getSongBool(songName);
-
-
-                        if (isValid) {
-                            System.out.println("You entered the VALID song name " + songName.toString()); // only prints the first
-                            break;
-                        } else {
-
-                            System.out.println("You entered the INVALID song name " + songName.toString()); // only prints the first
-
-//                        if (!(songName.matches("")) && (songs.getSong(songName) != null)) { // messed up
-//
-//
-//                            try {
-//                                //Song foundSong = new Song(songName);
-//                                System.out.println("Found song. Playing song. ");
-//                                //foundSong.play();
-//                                valid = false; // end loop
-//
-//                            } catch (NullPointerException e) {
-//                                System.out.println("Cannot play song.");
-//                                valid = false;
-//                            }
-//
-//                        } else {
-//                            System.out.println("Song not found. try again...");
-//                        }
-                        }
-                    } while (isValid);
+                boolean isNOTValid = true;
 
 
+
+
+                String songName = scanner.nextLine();
+                isNOTValid = !(songs.getSongBool(songName));
+
+
+                if (isNOTValid) {
+                    System.out.println("You entered the INVALID song name " + songName);
+                    //break;
                 } else {
-                    System.out.println("Artist not found. Try again...");
+
+                    System.out.println("You entered the VALID song name " + songName);
+
+                    if (true) { // messed up
+
+
+                        try {
+                            Song foundSong = songs.getSong(songName);
+                            System.out.println("Found song. Playing song. ");
+                            foundSong.play(); // works!
+
+
+                        } catch (NullPointerException e) {
+                            System.out.println("Cannot play song.");
+                        }
+
+                    } else {
+                        System.out.println("Song not found. try again...");
+                    }
                 }
 
 
-            } while (valid);
 
 
+            } else {
+                System.out.println("Artist not found in database. Try again...");
+            }
         }
-
     }
 }
+
+
+
+
