@@ -16,74 +16,70 @@ public class MPlayer {
     public static void main(String[] args) {
         SongCollection songs = new SongCollection(); // Constructor makes an empty 2D TreeMap too.
 
+        System.out.println("Welcome to the MP3 Player. ");
+
         if (args.length == 0) {
             System.out.println("No argument provided");
-            return; // Why does she have this here?
+            return;
         }
 
         // FILL IN CODE
         else {
             songs.loadSongs(args[0]); // args have been set to:  dir
             Scanner scanner = new Scanner(System.in);
-            // boolean valid = true; // Made a bool to control the following do-while statement:
+            boolean valid = true; // Made a bool to control the following do-while statement:
+
+            do {
+                System.out.println("Please enter the artist name: ");
+                String artistName = scanner.nextLine();
 
 
-            System.out.println("Welcome to the MP3 Player. Please enter the artist name: ");
-            String artistName = scanner.nextLine();
+                if (songs.searchForArtistName(artistName)) { // If artist exists...
+
+                    System.out.println("Artist found: " + artistName);
+
+                    Map<String, Song> artistSet = songs.getArtistSet(artistName); // Create new variable to search through
+                    System.out.println(artistSet.toString());
+                    System.out.println("key set: " + artistSet.keySet().toString());
+                    System.out.println("entry set: " + artistSet.entrySet().toString());
 
 
-            if (songs.searchForArtistName(artistName)) { // If artist exists...
+                    // Now, search for the song:
+                    System.out.println("Please enter the song name: ");
+                    
+                    boolean askForSong = false;
 
-                Map<String, Song> artistSet = songs.getArtistSet(artistName); // Create new variable to search through
+                    do {
+                        String songName = scanner.nextLine();
 
-                System.out.println(artistSet.toString());
-                System.out.println("key set: " + artistSet.keySet());
-                System.out.println("entry set: " + artistSet.entrySet());
+                        if (!(songs.getSongBool(songName))) {
+                            System.out.println("You entered the INVALID song name " + songName + " try again: ");
+                            askForSong = true;
 
+                        } else {
 
-                // Now, search for the song:
-                System.out.println("Artist found. Please enter the song name: ");
-
-                boolean isNOTValid = true;
-
-
-
-
-                String songName = scanner.nextLine();
-                isNOTValid = !(songs.getSongBool(songName));
+                            System.out.println("You entered the VALID song name " + songName);
 
 
-                if (isNOTValid) {
-                    System.out.println("You entered the INVALID song name " + songName);
-                    //break;
-                } else {
-
-                    System.out.println("You entered the VALID song name " + songName);
-
-                    if (true) { // messed up
+                            try {
+                                Song foundSong = songs.getSong(songName);
+                                System.out.println("Found song. Playing song. ");
+                                foundSong.play(); // works!
 
 
-                        try {
-                            Song foundSong = songs.getSong(songName);
-                            System.out.println("Found song. Playing song. ");
-                            foundSong.play(); // works!
-
-
-                        } catch (NullPointerException e) {
-                            System.out.println("Cannot play song.");
+                            } catch (NullPointerException e) {
+                                System.out.println("Cannot play song.");
+                            }
                         }
+                    } while (askForSong);
 
-                    } else {
-                        System.out.println("Song not found. try again...");
-                    }
+                }
+                else {
+                    System.out.println("Artist not found. Try again: ");
                 }
 
+            } while (valid);
 
-
-
-            } else {
-                System.out.println("Artist not found in database. Try again...");
-            }
         }
     }
 }
