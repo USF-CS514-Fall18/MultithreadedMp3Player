@@ -29,7 +29,7 @@ public class MPlayer {
             Scanner scanner = new Scanner(System.in);
             boolean valid = true; // Made a bool to control the following do-while statement:
 
-            System.out.println(songs.getClass());
+
             System.out.println("To string: " + songs.toString());
 
             do {
@@ -42,9 +42,6 @@ public class MPlayer {
                     System.out.println("Artist found: " + artistName);
 
                     Map<String, Song> artistSet = songs.getArtistSet(artistName); // Create new variable to search through
-                    System.out.println(artistSet.toString());
-                    System.out.println("key set: " + artistSet.keySet().toString());
-                    System.out.println("entry set: " + artistSet.entrySet().toString());
 
 
                     // Now, search for the song:
