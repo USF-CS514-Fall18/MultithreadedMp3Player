@@ -39,11 +39,14 @@ public class SongCollection {
         // Gets all files and subdirectories in a given directory
 
         // Make a new nested treemap:
-        TreeMap<String, TreeMap<String, Song>> bigMap = new TreeMap<>();
+
 
         Path path = Paths.get(dir); // Made a new path, arg is the String directory name
 
         try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path.toAbsolutePath())) {
+
+//            TreeMap<String, TreeMap<String, Song>> bigMap = new TreeMap<>();
+//            System.out.println(bigMap);
 
             for (Path file : filesList) {
                 if (!(Files.isDirectory(file))) { // Found the file in the dir
@@ -54,11 +57,12 @@ public class SongCollection {
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
 
-                        if (bigMap.containsKey(newSong.getArtist())) {
+
+                        if (songs.containsKey(newSong.getArtist())) {
                             // Artist has already been added.
                             // So there is a corresponding TreeMap value in the map.
                             // System.out.println("Artist " + newSongArtist + " has already been added. ");
-                            TreeMap<String, Song> smallMap = bigMap.get(newSongArtist);
+                            Map<String, Song> smallMap = songs.get(newSongArtist);
                             smallMap.put(newSongTitle, newSong);
 
 //                            for (Song song : smallMap.values()) {
@@ -75,13 +79,7 @@ public class SongCollection {
                             TreeMap<String, Song> smallMap = new TreeMap<>();
 
                             smallMap.put(newSongTitle, newSong);
-                            bigMap.put(newSongArtist, smallMap);
-
-//                            for (Song song : smallMap.values()) {
-//                                System.out.println(song.getTitle());
-//                            }
-
-
+                            songs.put(newSongArtist, smallMap);
 
                         }
 
@@ -120,7 +118,6 @@ public class SongCollection {
         for (String name : songs.keySet()) {
             if (name.matches(artistName)) {
                 res = songs.get(artistName);
-                System.out.println(res.toString());
             }
         }
         return res;
@@ -213,28 +210,19 @@ public class SongCollection {
         String res = "";
 
 
-//        for (Map.Entry<String, Map<String, Song>> artistEntry : songs.entrySet()) {
-//
-//            String artist = artistEntry.getKey();
-//
-//            res += artist + ": ";
-//
-//            for (Map.Entry<String, Song> titleEntry : artistEntry.getValue().entrySet()) {
-//
-//                String title = titleEntry.getKey();
-//                res +=  title + ", ";
-//            }
-//        }
+        for (Map.Entry<String, Map<String, Song>> artistEntry : songs.entrySet()) {
 
-        System.out.println("Let's try to print TreeMap! ");
-        
-        
+            String artist = artistEntry.getKey().toString();
 
-        Set<String> arts = songs.keySet();
+            res += artist + ": \n";
 
-        for (String art : arts)
+            for (Map.Entry<String, Song> titleEntry : artistEntry.getValue().entrySet()) {
 
-            res += songs.get(art);
+                String title = titleEntry.getKey();
+                res +=  " - " + title + "\n";
+            }
+            res += "\n";
+        }
 
         return res;
     }
