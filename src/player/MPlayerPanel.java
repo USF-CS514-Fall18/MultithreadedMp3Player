@@ -21,6 +21,9 @@ public class MPlayerPanel extends JPanel {
 
     private SongCollection songCollection; // collection of songs
 
+
+    private String[][] titleArtistArray2D; // I added this
+
     JPanel topPanel, bottomPanel;
     JScrollPane centerPanel;
 
@@ -100,10 +103,10 @@ public class MPlayerPanel extends JPanel {
         // and provide createTableElems method in class SongCollection
         // FILL IN CODE:
 
-        String[][] tableElems = songCollection.createTableElems();
+        titleArtistArray2D = songCollection.createTableElems();
         String[] columnNames = { "Title", "Artist" };
 
-        table = new JTable(tableElems, columnNames);
+        table = new JTable(titleArtistArray2D, columnNames);
         centerPanel.getViewport().add(table);
 
     }
@@ -130,7 +133,7 @@ public class MPlayerPanel extends JPanel {
 
                     // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
                     songCollection.loadSongs(dir.getPath()); // I added this
-                    displaySongs(); // I added this
+                    displaySongs(); // I added this. This will update our titleArtistArray2D too now.
                     updateUI(); // starter code
 
                 }
@@ -140,21 +143,31 @@ public class MPlayerPanel extends JPanel {
 
                 selectedSong = table.getSelectedRow(); // Gives us an integer # of the row
 
+                System.out.println(selectedSong);
+
                 // FILL IN CODE: play selected song in a separate thread (Given the integer # of row)
 
-                String songTitle = table.getValueAt(selectedSong, 0).toString();
-                String songArtist = table.getValueAt(selectedSong, 1).toString();
+                String songTitle = titleArtistArray2D[selectedSong][0];
+                String songArtist = titleArtistArray2D[selectedSong][1];
+
+                System.out.println("Extracted song title from titleArtistArray2D: " + songTitle);
+                System.out.println("Extracted song artist from titleArtistArray2D: " + songArtist);
+
+
 
                 // Now search for song title!
 
                 Song songToPlay = songCollection.getSong(songArtist, songTitle);
-
                 System.out.println("Song to play: " + songToPlay.toString());
-
                 songToPlay.play();
+
+
+
 
             } else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
+
+
 
 
             } else if (e.getSource() == exitButton) { // exit
