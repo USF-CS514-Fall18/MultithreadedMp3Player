@@ -104,12 +104,12 @@ public class MPlayerPanel extends JPanel {
 
         String[][] tableElems = songCollection.createTableElems();
 
-//        System.out.println("Table Elems: (printed by displaySongs())" + tableElems.toString());
-
         String[] columnNames = { "Title", "Artist" };
 
         table = new JTable(tableElems, columnNames);
         centerPanel.getViewport().add(table);
+
+        updateUI();
 
     }
 
@@ -139,8 +139,7 @@ public class MPlayerPanel extends JPanel {
 
                     System.out.println(songCollection.toString()); // I added this to test if we are loading it
 
-                    MPlayerPanel mpp = new MPlayerPanel(songCollection); // I added this
-                    mpp.displaySongs(); // I added this
+                    displaySongs(); // I added this
 
                     updateUI(); // starter code
 
