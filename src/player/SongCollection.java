@@ -119,7 +119,7 @@ public class SongCollection {
         }
         return songObject;
     }
-    
+
     /** @param artistName String representation of the artist name
      * @return songTitleList, which is an arrayList of song titles by the artist.
      * */
@@ -175,6 +175,17 @@ public class SongCollection {
         return res;
     }
 
+    /** @return String representation of SongCollection
+     * */
+    public int getSongsSize() { // Method does not work because I can't pull from songs before it is created.
+        int size = 1000;
+
+        size = songs.size();
+        return size;
+
+    }
+
+
     /** Creates a 2D array with two columns and enough rows for all the songs
      * Used in the MPlayerPanel class
      * @return arr2D a 2D String array
@@ -182,22 +193,31 @@ public class SongCollection {
      * Not done - OS
      * */
     public String[][] createTableElems() {
-        String[][] arr2D = new String[2][];
-        int idx = 0;
 
-        for (Map.Entry<String, Map<String, Song>> artistEntry : songs.entrySet()) {
-            String artist = artistEntry.getKey();
+        int tableSize = 10;
 
-            for (Map.Entry<String, Song> titleEntry : artistEntry.getValue().entrySet()) {
-                String title = titleEntry.getKey();
+        tableSize = getSongsSize();
+        System.out.println("Nested Map Size: " + tableSize);
 
-                System.out.println(artist);
-                System.out.println(title);
-//                arr2D[idx][0] = artist;
-//                arr2D[idx][1] = title;
-                idx++;
-            }
-        }
+       String[][] arr2D = new String[2][2];
+//       arr2D = new String[2][tableSize];
+//        int idx = 0;
+//
+//        for (String artist : songs.keySet()) { // Not working okurr
+//
+//            System.out.println("artist: " + artist);
+//
+//
+//            for (String title : songs.get(artist).keySet()) {
+//
+//
+//                System.out.println(artist);
+//                System.out.println(title);
+//                arr2D[idx][0] = title;
+//                arr2D[idx][1] = artist;
+//                idx++;
+//            }
+//        }
 
 
 //        for(int i = 0; i < 2; i++){
@@ -206,7 +226,7 @@ public class SongCollection {
 //            }
 //        }
 
-        return arr2D;
+       return arr2D;
     }
 
 }
