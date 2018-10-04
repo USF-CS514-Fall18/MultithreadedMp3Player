@@ -5,6 +5,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Array;
 import java.sql.SQLOutput;
 import java.util.*;
 
@@ -63,7 +64,6 @@ public class SongCollection {
                             songs.put(newSongArtist, smallMap);
 
                         }
-
                     }
                 }
             }
@@ -78,7 +78,7 @@ public class SongCollection {
      * @return  boolean whether search string is in the dir.
      * (Outer level search - keys are artist names)
      * */
-    public boolean searchForArtistName(String artistName) {
+    public boolean artistNameExists(String artistName) {
         boolean res = false;
 
         if (songs.containsKey(artistName))
@@ -87,18 +87,19 @@ public class SongCollection {
     }
 
     /** @param artistName String representation of the artist name
-     * @return Map<String, Song> object - the map entry that the artist name corresponds to
-     * (Outer level search - keys are artist names, values are "small" maps)
+     * @return res , an ArrayList<String> object - contains all the artist names
+     * (Searches through outer layer of TreeMap songs)
      * */
-    public Map<String, Song> getArtistSet(String artistName) {
-        Map<String, Song> res = null;
+    public ArrayList<String> getArtistList(String artistName) { // return an arraylist of set
+        ArrayList<String> artistList = new ArrayList<>();
 
         for (String name : songs.keySet()) {
             if (name.matches(artistName)) {
-                res = songs.get(artistName);
+                artistList.add(name);
             }
         }
-        return res;
+
+        return artistList;
     }
 
     /** @param title String representation of the song title
@@ -106,30 +107,39 @@ public class SongCollection {
      * @return Song object that the title corresponds to.
      * (Inner level search - keys are titles, values are Song objects)
      * */
-    public Song getSong(String title, Map<String, Song> songSet) {
+    public Song getSong(String artistName, String songTitle) { // Change this to artistName, songName
         Song res = null;
 
-        for (String t : songSet.keySet()) {
-            if (t.matches(title)) {
-                res = songSet.get(title);
+        for (String name : songs.keySet()) { // Iterate through artist names
+
+            for (String title : songs.get(name).keySet()) { // Iterate through song names
+                if (artistName.matches(name)) {
+
+                    res = songs.get(artistName).get(title); // Go through both TreeMap layers to get the song object
+                }
             }
         }
+
+
         return res;
     }
 
-    /** @param title String representation of the title
-     * @return boolean if the song is found.
+    /** @param artistName String representation of the artist name
+     * @return songTitleList, which is an arrayList of song titles by the artist.
      * */
-    public boolean getSongBool(String title, Map<String, Song> songSet) {
+    public ArrayList<String> getSongTitleList(String artistName) {
 
-        boolean res = false;
+        ArrayList<String> songTitleList = new ArrayList<>();
 
-        for (String t : songSet.keySet()) {
-            if (t.matches(title)) {
-                res = true;
+        // Search through songs TreeMap
+        for (String aName : songs.keySet()) {
+            if (aName.equals(artistName)) {
+                for (String title : songs.get(aName).keySet()) { // Find all titles.
+                    songTitleList.add(title); // And add them to the ArrayList
+                }
             }
         }
-        return res;
+        return songTitleList;
     }
 
     /** @return String representation of SongCollection
@@ -168,5 +178,40 @@ public class SongCollection {
 
         return res;
     }
+
+    /** Creates a 2D array with two columns and enough rows for all the songs
+     * Used in the MPlayerPanel class
+     * @return arr2D a 2D String array
+     *
+     * Not done - OS
+     * */
+    public String[][] createTableElems() {
+        String[][] arr2D = new String[2][];
+        int idx = 0;
+
+        for (Map.Entry<String, Map<String, Song>> artistEntry : songs.entrySet()) {
+            String artist = artistEntry.getKey();
+
+            for (Map.Entry<String, Song> titleEntry : artistEntry.getValue().entrySet()) {
+                String title = titleEntry.getKey();
+
+                System.out.println(artist);
+                System.out.println(title);
+//                arr2D[idx][0] = artist;
+//                arr2D[idx][1] = title;
+                idx++;
+            }
+        }
+
+
+//        for(int i = 0; i < 2; i++){
+//            for(int j = 0; j < 2; j++){
+//                System.out.println(arr2D[i][j]);
+//            }
+//        }
+
+        return arr2D;
+    }
+
 }
 
