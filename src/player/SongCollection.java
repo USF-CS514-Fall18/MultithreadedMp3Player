@@ -186,7 +186,7 @@ public class SongCollection {
     }
 
 
-    /** Creates a 2D array with two columns and enough rows for all the songs
+    /** Creates a map to fill a 2D array with two columns and enough rows for all the songs
      * Used in the MPlayerPanel class
      * @return arr2D a 2D String array
      *
@@ -194,37 +194,58 @@ public class SongCollection {
      * */
     public String[][] createTableElems() {
 
-        int tableSize = 10;
+        String[][] arr2D = new String[2][100];
 
-        tableSize = getSongsSize();
-        System.out.println("Nested Map Size: " + tableSize);
-
-       String[][] arr2D = new String[2][2];
-//       arr2D = new String[2][tableSize];
-//        int idx = 0;
+//        String[][] arr2D = new String[2][10];
 //
-//        for (String artist : songs.keySet()) { // Not working okurr
+//        // Fill with values:
+//        for (int i = 0; i < arr2D.length; i++) {
+//            for (int j = 0; j < arr2D[i].length; j++) {
+//                arr2D[0][j] = "somthing";
+//                arr2D[1][j] = "else";
 //
-//            System.out.println("artist: " + artist);
-//
-//
-//            for (String title : songs.get(artist).keySet()) {
-//
-//
-//                System.out.println(artist);
-//                System.out.println(title);
-//                arr2D[idx][0] = title;
-//                arr2D[idx][1] = artist;
-//                idx++;
+//                // Print 2D array:
+//                System.out.print(arr2D[0][j] + " ");
+//                System.out.println(arr2D[1][j]);
 //            }
+//
 //        }
 
 
-//        for(int i = 0; i < 2; i++){
-//            for(int j = 0; j < 2; j++){
-//                System.out.println(arr2D[i][j]);
-//            }
-//        }
+
+//        int tableSize = 10;
+//        tableSize = getSongsSize();
+//        System.out.println("Nested Map Size: " + tableSize);
+
+
+        int k = 0;
+
+        for (String artist : songs.keySet()) { // Works
+
+            for (String title : songs.get(artist).keySet()) {
+
+                System.out.println("artist: " + artist);
+                System.out.println("titl: " + title);
+
+                arr2D[0][k] = title;
+                arr2D[1][k] = artist;
+
+                k ++;
+
+            }
+        }
+
+
+        // Print 2D array:
+        System.out.println("Final 2D array...");
+        for (int i = 0; i < arr2D.length; i++) {
+            for (int j = 0; j < arr2D[i].length; j++) {
+                System.out.print(arr2D[0][j] + " ");
+                System.out.println(arr2D[1][j]);
+            }
+
+        }
+
 
        return arr2D;
     }
