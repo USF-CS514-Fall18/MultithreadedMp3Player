@@ -2,6 +2,7 @@ package player;
 
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -31,33 +32,37 @@ public class MPlayer {
             String directory = scanner.nextLine();
             songs.loadSongs(directory); // args have been set to:  dir
 
-            boolean valid = true; // Made a bool to control the following do-while statement:
-
             String artistName;
 
-            do {
+            while (true) {
                 System.out.println(songs);
                 System.out.println("Search the song by the artist or press Q to exit: ");
                 artistName = scanner.nextLine();
 
                 if (artistName.matches("Q")) {
-                    valid = false;
                     System.out.println("Goodbye");
                     break;
-                } else if (songs.searchForArtistName(artistName)) { // If artist exists...
 
-                    Map<String, Song> artistSet = songs.getArtistSet(artistName); // Get "small" map object to search through
+                } else if (songs.artistNameExists(artistName)) { // If artist exists...
+
+                    ArrayList<String> artistList = songs.getArtistList(artistName); // Make an ArrayList of all the names
 
                     System.out.println("These are all the songs by this artist. Which one would you like to play?");
-                    for (String s : artistSet.keySet()) {
-                        System.out.println("- " + s);
+                    for (String artName : artistList) {
+                        ArrayList<String> songList = songs.getSongTitleList(artName);
+
+                        for (String songName : songList) {
+                            System.out.println("- " + songName);
+                        }
                     }
 
                     boolean askForSong = false;
                     do {
                         String songName = scanner.nextLine();
 
-                        if (!(songs.getSongBool(songName, artistSet))) {
+                        //if (!(songs.getSongBool(songName, artistSet))) {
+                        if (true) { // Change back!
+
                             System.out.println("You entered an invalid song name " + songName + ". Please try again: ");
                             askForSong = true;
 
@@ -66,7 +71,7 @@ public class MPlayer {
                             try {
                                 String stop;
                                 do {
-                                    Song foundSong = songs.getSong(songName, artistSet);
+                                    Song foundSong = songs.getSong(artistName, songName);
                                     System.out.println("Playing the song: " + foundSong.toString());
                                     foundSong.play();
 
@@ -86,7 +91,7 @@ public class MPlayer {
                     System.out.println("Artist not found. Try again: ");
                 }
 
-            } while (valid);
+            }
 
         }
     }
