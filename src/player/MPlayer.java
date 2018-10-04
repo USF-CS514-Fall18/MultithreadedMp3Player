@@ -30,7 +30,7 @@ public class MPlayer {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Please enter the directory containing the .mp3 files: ");
             String directory = scanner.nextLine();
-            songs.loadSongs(directory); // args have been set to:  dir
+            songs.loadSongs(directory); // User should enter : dir (or other directory)
 
             String artistName;
 
@@ -60,8 +60,7 @@ public class MPlayer {
                     do {
                         String songName = scanner.nextLine();
 
-                        //if (!(songs.getSongBool(songName, artistSet))) {
-                        if (true) { // Change back!
+                        if (songs.getSong(artistName, songName) == null) {
 
                             System.out.println("You entered an invalid song name " + songName + ". Please try again: ");
                             askForSong = true;
@@ -85,14 +84,11 @@ public class MPlayer {
                                 System.out.println("Cannot play song.");
                             }
                         }
-
                     } while (askForSong);
                 } else {
                     System.out.println("Artist not found. Try again: ");
                 }
-
             }
-
         }
     }
 }
