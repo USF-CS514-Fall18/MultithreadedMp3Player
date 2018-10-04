@@ -5,6 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /** Provides a nice GUI for the mpl3 player lab.
@@ -92,14 +98,28 @@ public class MPlayerPanel extends JPanel {
         // For part 2 of the lab, you would need to uncomment the code below
         // and provide createTableElems method in class SongCollection
 
-        // FILL IN CODE: uncomment the code below for part 2 of the lab
-        /*
+        // FILL IN CODE:
+
+
+//        String[][] tableElems = new String[2][2]; // made one with null values
+//        tableElems[0][0] = "asd";
+//        tableElems[0][1] = "jl";
+//        tableElems[1][0] = "k";
+//        tableElems[1][1] = "s";
+
         String[][] tableElems = songCollection.createTableElems();
+        tableElems[0][0] = "asd";
+        tableElems[0][1] = "jl";
+        tableElems[1][0] = "k";
+        tableElems[1][1] = "s";
+
+
+        //tableElems = songCollection.createTableElems(); // Not working yet - OS
         String[] columnNames = { "Title", "Artist" };
 
         table = new JTable(tableElems, columnNames);
         centerPanel.getViewport().add(table);
-        */
+
     }
 
     /** A inner listener class for buttons and textfields **/
@@ -122,11 +142,14 @@ public class MPlayerPanel extends JPanel {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File dir = fc.getSelectedFile();
 
-                    // FILL IN CODE
-                    // Load songs into SongCollection songs from
-                    // the given directory
+                    // FILL IN CODE - Load songs into SongCollection songs from the given directory
 
-                    // Display songs in the table of the panel
+                    SongCollection sc = new SongCollection();
+                    sc.loadSongs(dir.getPath());
+
+                    System.out.println(sc.toString()); // to test if we are loading it
+
+                    displaySongs(); // I added this
 
                     updateUI();
 
