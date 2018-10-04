@@ -84,7 +84,7 @@ public class SongCollection {
     }
 
     /** @param artistName String representation of the artist name
-     * @return res , an ArrayList<String> object - contains all the artist names
+     * @return artistList, an ArrayList<String> object - contains all the artist names
      * (Searches through outer layer of TreeMap songs)
      * */
     public ArrayList<String> getArtistList(String artistName) { // return an arraylist of set
@@ -95,36 +95,31 @@ public class SongCollection {
                 artistList.add(name);
             }
         }
-
         return artistList;
     }
 
     /**
-     *  @param artistName String representation of the artist name
+     * @param artistName String representation of the artist name
      * @param songTitle song name String
-     * @return Song object that the title corresponds to.
+     * @return songObject , a Song object that the title corresponds to.
      *
-     * Inner level search
+     * (Inner level search)
      * */
-    public Song getSong(String artistName, String songTitle) { // Change this to artistName, songName
-        Song res = null;
+    public Song getSong(String artistName, String songTitle) {
+        Song songObject = null;
 
         for (String name : songs.keySet()) { // Iterate through artist names
 
             for (String title : songs.get(name).keySet()) { // Iterate through song names
-                if (artistName.matches(name)) {
-                    res = songs.get(artistName).get(title); // Go through both TreeMap layers to get the song object
+
+                if (artistName.matches(name) && songTitle.matches(title))  {
+                    songObject = songs.get(artistName).get(title); // Go through both TreeMap layers to get the song object
                 }
             }
         }
-        return res;
+        return songObject;
     }
-
-    public boolean getSongBool(String artistName, String songTitle) {
-
-        return (getSong(artistName, songTitle) instanceof Song);
-    }
-
+    
     /** @param artistName String representation of the artist name
      * @return songTitleList, which is an arrayList of song titles by the artist.
      * */
