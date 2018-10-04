@@ -1,5 +1,7 @@
 package player;
 
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+
 import java.util.Map;
 import java.util.Scanner;
 
@@ -20,18 +22,21 @@ public class MPlayer {
 
         if (args.length == 0) {
             System.out.println("No argument provided");
-            return;
         }
 
         // FILL IN CODE
         else {
-            songs.loadSongs(args[0]); // args have been set to:  dir
             Scanner scanner = new Scanner(System.in);
+            System.out.println("Please enter the directory containing the .mp3 files: ");
+            String directory = scanner.nextLine();
+            songs.loadSongs(directory); // args have been set to:  dir
+
             boolean valid = true; // Made a bool to control the following do-while statement:
 
             String artistName;
 
             do {
+                System.out.println(songs);
                 System.out.println("Search the song by the artist or press Q to exit: ");
                 artistName = scanner.nextLine();
 
@@ -39,9 +44,7 @@ public class MPlayer {
                     valid = false;
                     System.out.println("Goodbye");
                     break;
-                }
-
-                else if (songs.searchForArtistName(artistName)) { // If artist exists...
+                } else if (songs.searchForArtistName(artistName)) { // If artist exists...
 
                     Map<String, Song> artistSet = songs.getArtistSet(artistName); // Get "small" map object to search through
 
@@ -61,13 +64,17 @@ public class MPlayer {
                         } else {
 
                             try {
-                                Song foundSong = songs.getSong(songName, artistSet);
-                                System.out.println("Playing the song: " + foundSong.toString());
-                                foundSong.play();
-                                
-                                
+                                String stop;
+                                do {
+                                    Song foundSong = songs.getSong(songName, artistSet);
+                                    System.out.println("Playing the song: " + foundSong.toString());
+                                    foundSong.play();
 
+                                    System.out.println("To stop, enter 'S'");
+                                    Scanner sc = new Scanner(System.in);
+                                    stop = sc.nextLine();
 
+                                } while (stop.matches("S"));
 
                             } catch (NullPointerException e) {
                                 System.out.println("Cannot play song.");
@@ -75,13 +82,12 @@ public class MPlayer {
                         }
 
                     } while (askForSong);
-                }
-
-                else {
+                } else {
                     System.out.println("Artist not found. Try again: ");
                 }
 
             } while (valid);
+
         }
     }
 }
