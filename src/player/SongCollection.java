@@ -175,16 +175,17 @@ public class SongCollection {
         return res;
     }
 
-    /** @return String representation of SongCollection
+    /** @return integer size of nested TreeMap
+     * (Used for constructing our 2D Array in createTableElems())
      * */
-    public int getSongsSize() { // Method does not work because I can't pull from songs before it is created.
-        int size = 1000;
+    public int getSongsSize() {
+        int size = 0;
+        for (String artist : songs.keySet()) { // Works
 
-        size = songs.size();
+            size += songs.get(artist).size();
+        }
         return size;
-
     }
-
 
     /** Creates a map to fill a 2D array with two columns and enough rows for all the songs
      * Used in the MPlayerPanel class
@@ -194,28 +195,11 @@ public class SongCollection {
      * */
     public String[][] createTableElems() {
 
-        String[][] arr2D = new String[2][100];
 
-//        String[][] arr2D = new String[2][10];
-//
-//        // Fill with values:
-//        for (int i = 0; i < arr2D.length; i++) {
-//            for (int j = 0; j < arr2D[i].length; j++) {
-//                arr2D[0][j] = "somthing";
-//                arr2D[1][j] = "else";
-//
-//                // Print 2D array:
-//                System.out.print(arr2D[0][j] + " ");
-//                System.out.println(arr2D[1][j]);
-//            }
-//
-//        }
+        int tableSize = getSongsSize();
+        System.out.println("Nested Map Size: " + tableSize);
 
-
-
-//        int tableSize = 10;
-//        tableSize = getSongsSize();
-//        System.out.println("Nested Map Size: " + tableSize);
+        String[][] arr2D = new String[tableSize][2];
 
 
         int k = 0;
@@ -224,11 +208,9 @@ public class SongCollection {
 
             for (String title : songs.get(artist).keySet()) {
 
-                System.out.println("artist: " + artist);
-                System.out.println("titl: " + title);
 
-                arr2D[0][k] = title;
-                arr2D[1][k] = artist;
+                arr2D[k][0] = title;
+                arr2D[k][1] = artist;
 
                 k ++;
 
