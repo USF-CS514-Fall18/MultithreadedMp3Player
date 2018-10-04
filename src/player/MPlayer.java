@@ -44,7 +44,7 @@ public class MPlayer {
         }
     }
 
-    static void promptUser(SongCollection songCol) {
+    public static void promptUser(SongCollection songCol) {
         String artistName;
 
         while (true) {
