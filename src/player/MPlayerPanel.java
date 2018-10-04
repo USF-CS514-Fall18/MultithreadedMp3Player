@@ -9,6 +9,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -101,20 +102,10 @@ public class MPlayerPanel extends JPanel {
         // FILL IN CODE:
 
 
-//        String[][] tableElems = new String[2][2]; // made one with null values
-//        tableElems[0][0] = "asd";
-//        tableElems[0][1] = "jl";
-//        tableElems[1][0] = "k";
-//        tableElems[1][1] = "s";
-
         String[][] tableElems = songCollection.createTableElems();
-        tableElems[0][0] = "asd";
-        tableElems[0][1] = "jl";
-        tableElems[1][0] = "k";
-        tableElems[1][1] = "s";
 
+//        System.out.println("Table Elems: (printed by displaySongs())" + tableElems.toString());
 
-        //tableElems = songCollection.createTableElems(); // Not working yet - OS
         String[] columnNames = { "Title", "Artist" };
 
         table = new JTable(tableElems, columnNames);
@@ -144,14 +135,14 @@ public class MPlayerPanel extends JPanel {
 
                     // FILL IN CODE - Load songs into SongCollection songs from the given directory
 
-                    SongCollection sc = new SongCollection();
-                    sc.loadSongs(dir.getPath());
+                    songCollection.loadSongs(dir.getPath());
 
-                    System.out.println(sc.toString()); // to test if we are loading it
+                    System.out.println(songCollection.toString()); // I added this to test if we are loading it
 
-                    displaySongs(); // I added this
+                    MPlayerPanel mpp = new MPlayerPanel(songCollection); // I added this
+                    mpp.displaySongs(); // I added this
 
-                    updateUI();
+                    updateUI(); // starter code
 
                 }
             }
