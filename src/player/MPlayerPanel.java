@@ -21,8 +21,12 @@ public class MPlayerPanel extends JPanel {
 
     private SongCollection songCollection; // collection of songs
 
-
     private String[][] titleArtistArray2D; // I added this
+
+    private Song songCurrent; // I added this
+
+    //private String artistNameQuery = ""; // I added this - for searching for artist name
+
 
     JPanel topPanel, bottomPanel;
     JScrollPane centerPanel;
@@ -97,13 +101,13 @@ public class MPlayerPanel extends JPanel {
     }
 
     /** Shows songs in the table */
-    public void displaySongs() {
+    public void displaySongs(String artistNameQuery) {
 
         // For part 2 of the lab, you would need to uncomment the code below
         // and provide createTableElems method in class SongCollection
         // FILL IN CODE:
 
-        titleArtistArray2D = songCollection.createTableElems();
+        titleArtistArray2D = songCollection.createTableElems(artistNameQuery);
         String[] columnNames = { "Title", "Artist" };
 
         table = new JTable(titleArtistArray2D, columnNames);
@@ -150,22 +154,22 @@ public class MPlayerPanel extends JPanel {
                 String songTitle = titleArtistArray2D[selectedSong][0];
                 String songArtist = titleArtistArray2D[selectedSong][1];
 
-                System.out.println("Extracted song title from titleArtistArray2D: " + songTitle);
-                System.out.println("Extracted song artist from titleArtistArray2D: " + songArtist);
+                System.out.println("Extracted song title: " + songTitle);
+                System.out.println("Extracted song artist: " + songArtist);
 
 
 
-                // Now search for song title!
-
-                Song songToPlay = songCollection.getSong(songArtist, songTitle);
-                System.out.println("Song to play: " + songToPlay.toString());
-                songToPlay.play();
+                System.out.println("// Now search for song title!");
+                songCurrent = songCollection.getSong(songArtist, songTitle);
 
 
+                System.out.println("Song to play: " + songCurrent.toString());
+                songCurrent.play();
 
 
             } else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
+                songCurrent.stop(); // This does not work!!
 
 
 
@@ -179,6 +183,11 @@ public class MPlayerPanel extends JPanel {
                 // FILL IN CODE
                 // Filter songs by the given artist (searchArtist)
                 // Display only songs by this artist
+
+                System.out.println(searchArtist);
+
+                // Before, our searchArtist query was "" but now it's specific.
+                songCollection.createTableElems(searchArtist);
 
                 updateUI();
 
