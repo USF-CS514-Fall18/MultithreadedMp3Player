@@ -79,11 +79,8 @@ public class SongCollection {
      * (Outer level search - keys are artist names)
      * */
     public boolean artistNameExists(String artistName) {
-        boolean res = false;
+        return (songs.containsKey(artistName));
 
-        if (songs.containsKey(artistName))
-            res = true;
-        return res;
     }
 
     /** @param artistName String representation of the artist name
@@ -102,10 +99,12 @@ public class SongCollection {
         return artistList;
     }
 
-    /** @param title String representation of the song title
-     * @param songSet the "small" Map object that we are looking through (now that we know the artist)
+    /**
+     *  @param artistName String representation of the artist name
+     * @param songTitle song name String
      * @return Song object that the title corresponds to.
-     * (Inner level search - keys are titles, values are Song objects)
+     *
+     * Inner level search
      * */
     public Song getSong(String artistName, String songTitle) { // Change this to artistName, songName
         Song res = null;
@@ -114,14 +113,16 @@ public class SongCollection {
 
             for (String title : songs.get(name).keySet()) { // Iterate through song names
                 if (artistName.matches(name)) {
-
                     res = songs.get(artistName).get(title); // Go through both TreeMap layers to get the song object
                 }
             }
         }
-
-
         return res;
+    }
+
+    public boolean getSongBool(String artistName, String songTitle) {
+
+        return (getSong(artistName, songTitle) instanceof Song);
     }
 
     /** @param artistName String representation of the artist name
