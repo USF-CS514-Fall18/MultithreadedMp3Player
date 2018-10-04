@@ -98,18 +98,13 @@ public class MPlayerPanel extends JPanel {
 
         // For part 2 of the lab, you would need to uncomment the code below
         // and provide createTableElems method in class SongCollection
-
         // FILL IN CODE:
 
-
         String[][] tableElems = songCollection.createTableElems();
-
         String[] columnNames = { "Title", "Artist" };
 
         table = new JTable(tableElems, columnNames);
         centerPanel.getViewport().add(table);
-
-        updateUI();
 
     }
 
@@ -133,14 +128,9 @@ public class MPlayerPanel extends JPanel {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File dir = fc.getSelectedFile();
 
-                    // FILL IN CODE - Load songs into SongCollection songs from the given directory
-
-                    songCollection.loadSongs(dir.getPath());
-
-                    System.out.println(songCollection.toString()); // I added this to test if we are loading it
-
+                    // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
+                    songCollection.loadSongs(dir.getPath()); // I added this
                     displaySongs(); // I added this
-
                     updateUI(); // starter code
 
                 }
@@ -148,10 +138,20 @@ public class MPlayerPanel extends JPanel {
 
             else if (e.getSource() == playButton) { // for playing the song
 
-                selectedSong = table.getSelectedRow();
-                // FILL IN CODE: play selected song in a separate thread
+                selectedSong = table.getSelectedRow(); // Gives us an integer # of the row
 
+                // FILL IN CODE: play selected song in a separate thread (Given the integer # of row)
 
+                String songTitle = table.getValueAt(selectedSong, 0).toString();
+                String songArtist = table.getValueAt(selectedSong, 1).toString();
+
+                // Now search for song title!
+
+                Song songToPlay = songCollection.getSong(songArtist, songTitle);
+
+                System.out.println("Song to play: " + songToPlay.toString());
+
+                songToPlay.play();
 
             } else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
