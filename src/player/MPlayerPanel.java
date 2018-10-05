@@ -101,13 +101,21 @@ public class MPlayerPanel extends JPanel {
     }
 
     /** Shows songs in the table */
-    public void displaySongs() {
+    public void displaySongs(String artistQuery) {
 
         // For part 2 of the lab, you would need to uncomment the code below
         // and provide createTableElems method in class SongCollection
         // FILL IN CODE:
 
-        titleArtistArray2D = songCollection.createTableElems(); // a String[][] array (2D)
+        if (artistQuery.equals("")) {
+
+            titleArtistArray2D = songCollection.createTableElems(); // a String[][] array (2D)
+        }
+        else {
+            titleArtistArray2D = songCollection.createTableElems(artistQuery); // Takes artist query
+
+        }
+
         String[] columnNames = { "Title", "Artist" };
 
         table = new JTable(titleArtistArray2D, columnNames);
@@ -139,7 +147,7 @@ public class MPlayerPanel extends JPanel {
 
                     // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
                     songCollection.loadSongs(dir.getPath()); // I added this
-                    displaySongs(); // I added this. This will update our titleArtistArray2D too now.
+                    displaySongs(""); // I added this. This will update our titleArtistArray2D too now.
                     updateUI(); // starter code
 
                     System.out.println(dir);
@@ -185,17 +193,22 @@ public class MPlayerPanel extends JPanel {
 
             else if (e.getSource() == searchButton) { // search by artist
                 String searchArtist = searchBox.getText();
+                System.out.println("search Artist button");
+                System.out.println(searchArtist);
+
                 // FILL IN CODE
                 // Filter songs by the given artist (searchArtist)
                 // Display only songs by this artist
 
-                System.out.println(searchArtist);
 
-                // Before, our searchArtist query was "" but now it's specific.
-                // songCollection.createTableElems(searchArtist);
-                // songCollection.loadSongs();
 
-                updateUI();
+                // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
+                ///songCollection.loadSongs(dir.getPath()); // I added this
+
+                displaySongs(searchArtist); // I added this. This will update our titleArtistArray2D too now.
+                updateUI(); // starter code
+
+
 
 
             }
