@@ -101,17 +101,19 @@ public class MPlayerPanel extends JPanel {
     }
 
     /** Shows songs in the table */
-    public void displaySongs(String artistNameQuery) {
+    public void displaySongs() {
 
         // For part 2 of the lab, you would need to uncomment the code below
         // and provide createTableElems method in class SongCollection
         // FILL IN CODE:
 
-        titleArtistArray2D = songCollection.createTableElems(artistNameQuery);
+        titleArtistArray2D = songCollection.createTableElems(); // a String[][] array (2D)
         String[] columnNames = { "Title", "Artist" };
 
         table = new JTable(titleArtistArray2D, columnNames);
         centerPanel.getViewport().add(table);
+
+        updateUI(); // needed?
 
     }
 
@@ -139,6 +141,8 @@ public class MPlayerPanel extends JPanel {
                     songCollection.loadSongs(dir.getPath()); // I added this
                     displaySongs(); // I added this. This will update our titleArtistArray2D too now.
                     updateUI(); // starter code
+
+                    System.out.println(dir);
 
                 }
             }
@@ -169,6 +173,7 @@ public class MPlayerPanel extends JPanel {
 
             } else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
+                // Do we need to do songCollection.method?? Why can't I access this Song object.
                 songCurrent.stop(); // This does not work!!
 
 
@@ -187,7 +192,8 @@ public class MPlayerPanel extends JPanel {
                 System.out.println(searchArtist);
 
                 // Before, our searchArtist query was "" but now it's specific.
-                songCollection.createTableElems(searchArtist);
+                // songCollection.createTableElems(searchArtist);
+                // songCollection.loadSongs();
 
                 updateUI();
 
