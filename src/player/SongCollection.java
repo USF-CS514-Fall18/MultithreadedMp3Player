@@ -9,7 +9,6 @@ import java.sql.Array;
 import java.sql.SQLOutput;
 import java.util.*;
 
-
 /** SongCollection class stores all the songs in a nested TreeMap (see below),
  *  and has methods to manipulate songs.
  *
@@ -175,8 +174,11 @@ public class SongCollection {
         return res;
     }
 
-    /** @return integer size of nested TreeMap
-     * (Used for constructing our 2D Array in createTableElems())
+    /**
+     * getSongsSize is a helper function for createTableElems().
+     * Used for constructing our 2D Array in createTableElems()
+     * @return integer size of nested TreeMap
+     *
      * */
     public int getSongsSize() {
         int size = 0;
@@ -187,49 +189,71 @@ public class SongCollection {
         return size;
     }
 
-    /** Creates a map to fill a 2D array with two columns and enough rows for all the songs
+    /**
+     * Creates a 2D array with two columns and enough rows for all the songs
      * Used in the MPlayerPanel class
      * @return arr2D a 2D String array
      *
-     * Not done - OS
      * */
     public String[][] createTableElems() {
-
+        // artistname might be blank...
+        // If so, call this version of createTableElems.
+        // It will create a FULL SIZED 2D array (all songs).
 
         int tableSize = getSongsSize();
-        System.out.println("Nested Map Size: " + tableSize);
+        //System.out.println("Nested Map Size: " + tableSize);
 
         String[][] arr2D = new String[tableSize][2];
 
-
         int k = 0;
-
         for (String artist : songs.keySet()) { // Works
 
             for (String title : songs.get(artist).keySet()) {
-
-
                 arr2D[k][0] = title;
                 arr2D[k][1] = artist;
-
-                k ++;
-
+                k++;
             }
-        }
 
+        }
 
         // Print 2D array:
-        System.out.println("Final 2D array...");
-        for (int i = 0; i < arr2D.length; i++) {
-            for (int j = 0; j < arr2D[i].length; j++) {
-                System.out.print(arr2D[0][j] + " ");
-                System.out.println(arr2D[1][j]);
+//        System.out.println("Final 2D array...");
+//        for (int i = 0; i < arr2D.length; i++) {
+//            for (int j = 0; j < arr2D[i].length; j++) {
+//                System.out.print(arr2D[0][j] + " ");
+//                System.out.println(arr2D[1][j]);
+//            }
+
+        //}
+
+       return arr2D;
+    }
+
+    public String[][] createTableElems(String artistQuery) {
+        // Overloading this method name because I want to pass an argument (the search query) to this.
+        // It will return a NARROWED DOWN 2D array (only songs matching artistQuery).
+
+        int tableSize = getSongsSize();
+        //System.out.println("Nested Map Size: " + tableSize);
+
+        String[][] arr2D = new String[tableSize][2];
+
+        int k = 0;
+        for (String artist : songs.keySet()) { // Works
+
+            if (artist.equals(artistQuery)) {
+
+                for (String title : songs.get(artist).keySet()) {
+                    arr2D[k][0] = title;
+                    arr2D[k][1] = artist;
+                    k++;
+                }
             }
 
         }
 
 
-       return arr2D;
+        return arr2D;
     }
 
 }
