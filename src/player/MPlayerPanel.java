@@ -1,10 +1,15 @@
 package player;
 
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -180,25 +185,18 @@ public class MPlayerPanel extends JPanel {
 
 
                 // Start a new thread
-                // if (currThread == null) {
-                currThread = new MyThread(songCurrent); // Every time the start button is pressed we create a new thread
-                // currThread.start();
-                // currThread.run();
-
-
-                //songCurrent.play();
+                String filename = songCurrent.getFilename();
+                System.out.println(filename);
+                currThread = new PlayerThread(filename);
+                currThread.start();
 
 
             } else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
-                // Do we need to do songCollection.method?? Why can't I access this Song object.
-                // songCurrent.stop(); // This does not work!!
-                // if (currThread.isAlive()) {
-                System.out.println("Quitting thread.");
-                //currThread.quit();
-                currThread.interrupt();
-                // }
 
+                System.out.println("Stopping thread.");
+                ((PlayerThread) currThread).player.close();
+                currThread.interrupt();
 
 
 
@@ -247,31 +245,31 @@ public class MPlayerPanel extends JPanel {
      *     https://docs.oracle.com/javase/tutorial/essential/concurrency/runthread.html
      *     */
 
-    public class MyThread extends Thread {
-        private Song song;
-        private String threadName;
+    class PlayerThread extends Thread {
+        Player player;
+        PlayerThread(String filename) {
+            FileInputStream file;
+            try {
+                file = new FileInputStream(filename);
+                player = new Player(file);
 
-        public MyThread(Song song) {
-            this.song = song;
-            start();
-        }
-
-
-        @Override
-        public void run() {
-            System.out.println("Mew thread running!");
-            song.play();
-
-        }
-
-        @Override
-        public void interrupt() {
-
-            if (this==Thread.currentThread()) {
-                System.out.println("Interrupting song usting Song stop method");
-                this.interrupt();
+            } catch (FileNotFoundException e) {
+                e.getMessage();
+            } catch (JavaLayerException e) {
+                e.getMessage();
             }
         }
+
+        public void run() {
+            try {
+                player.play();
+
+            }
+            catch (Exception e) {
+                e.getMessage();
+            }
+        }
+
 
     }
 }
