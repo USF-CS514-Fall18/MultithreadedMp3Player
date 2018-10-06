@@ -16,6 +16,14 @@ import java.util.TreeMap;
 
 /** Provides a nice GUI for the mpl3 player lab.
  * For part 2 of the lab only - do not use or modify it for part 1.
+ *
+ * TO DO:
+ * your code should be able to recursively find mp3 files in a given directory
+ * you should be able to efficiently search for songs by an artist whose name starts with the given keyword (Ex: I should be able to type Tayl instead of Taylor Swift)
+ * selected song should be playing in a separate thread, so that the user could continue interacting with the program;
+ * the user should be able to stop the song.
+ * your program should be intergrated with the GUI provided by the instructor (see below)
+ *
  */
 public class MPlayerPanel extends JPanel {
 
@@ -186,31 +194,39 @@ public class MPlayerPanel extends JPanel {
 
 
 
-
             } else if (e.getSource() == exitButton) { // exit
                 System.exit(0);
             }
 
             else if (e.getSource() == searchButton) { // search by artist
-                String searchArtist = searchBox.getText();
-                System.out.println("search Artist button");
-                System.out.println(searchArtist);
 
-                // FILL IN CODE
-                // Filter songs by the given artist (searchArtist)
-                // Display only songs by this artist
+                boolean exists = false;
+
+                do {
+                    // System.out.println("search Artist button");
+                    String searchArtist = searchBox.getText();
+
+                    for (String artist : songCollection.getAllArtists()) {
+                        if (songCollection.getPartialMatch(searchArtist, artist)) {
+                            exists = true;
+                        }
+                    }
+
+                    if (exists) {
+                        System.out.println(searchArtist);
+                        displaySongs(searchArtist); // I added this. This will update our titleArtistArray2D too now.
+                        updateUI(); // starter code®
+                        break;
+                    }
 
 
 
-                // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
-                ///songCollection.loadSongs(dir.getPath()); // I added this
+                    else {
+                        System.out.println("Your entry does not match any artist names. Try again: ");
+                        break;
+                    }
 
-                displaySongs(searchArtist); // I added this. This will update our titleArtistArray2D too now.
-                updateUI(); // starter code
-
-
-
-
+                } while (exists);
             }
         } // actionPerformed
     } // ButtonListener
