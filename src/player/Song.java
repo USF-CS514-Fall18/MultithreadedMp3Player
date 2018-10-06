@@ -9,6 +9,7 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.*;
 import java.io.*;
+import java.util.Scanner;
 
 
 /** Class Song - represents a song in the SongCollection.
@@ -19,6 +20,8 @@ public class Song  {
     private String title;
     private String artist;
     private String filename;
+
+    public Player player;
 
     /** Constructor of class Song.
      * Takes the name of the file that contains the mp3 of this song,
@@ -33,13 +36,20 @@ public class Song  {
 
         try {
             File f = new File(filename);
+
+            FileInputStream fStream = new FileInputStream(filename);
+            BufferedInputStream bStream = new BufferedInputStream(fStream);
+
+            player = new Player(bStream);
+
+
             AudioFile audioFile = AudioFileIO.read(f);
             Tag tag = audioFile.getTag();
 
             title = tag.getFirst(FieldKey.TITLE);
             artist = tag.getFirst(FieldKey.ARTIST);
 
-        } catch ( IOException | TagException | CannotReadException | ReadOnlyFileException | InvalidAudioFrameException e) {
+        } catch ( IOException | TagException | CannotReadException | ReadOnlyFileException | InvalidAudioFrameException | JavaLayerException e) {
             System.out.println("Some exception occurred when reading from file.");
             e.printStackTrace();
         }
@@ -67,21 +77,18 @@ public class Song  {
     public void play() {
         // FILL IN CODE
         try {
-            FileInputStream fStream = new FileInputStream(filename);
-            BufferedInputStream bStream = new BufferedInputStream(fStream);
-
-            Player player = new Player(bStream);
             player.play();
-
-            if (player.isComplete()) {
-                stopPlaying(player);
-            }
-
-        } catch (JavaLayerException | FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (JavaLayerException e) {
+            System.out.println("JavaLayerException.");
         }
     }
-    
+    public void stop() {
+        // FILL IN CODE
+
+        // player.close(); // Doesn't work
+
+    }
+
     /** Feel free to add other methods as needed */
 
     /** Return the title of the song - I added this - OS
@@ -97,10 +104,4 @@ public class Song  {
         return artist;
     }
 
-    /** Stops playing the song
-     * @param player the Player object
-     */
-    public void stopPlaying(Player player) {
-        player.close();
-    }
 }
