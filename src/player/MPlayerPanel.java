@@ -34,13 +34,8 @@ import java.util.TreeMap;
 public class MPlayerPanel extends JPanel {
 
     private SongCollection songCollection; // collection of songs
-
     private String[][] titleArtistArray2D; // I added this
-
     private Song songCurrent; // I added this
-
-    //private String artistNameQuery = ""; // I added this - for searching for artist name
-
 
     JPanel topPanel, bottomPanel;
     JScrollPane centerPanel;
@@ -88,7 +83,6 @@ public class MPlayerPanel extends JPanel {
         playButton.addActionListener(new MyButtonListener());
         stopButton.addActionListener(new MyButtonListener());
 
-
         // add buttons and a textfield to the top panel
         topPanel.add(loadMp3Button);
         topPanel.add(searchBox);
@@ -116,34 +110,29 @@ public class MPlayerPanel extends JPanel {
 
     /** Shows songs in the table */
     public void displaySongs(String artistQuery) {
-
         // For part 2 of the lab, you would need to uncomment the code below
         // and provide createTableElems method in class SongCollection
         // FILL IN CODE:
 
         if (artistQuery.equals("")) {
-
             titleArtistArray2D = songCollection.createTableElems(); // a String[][] array (2D)
         }
+
         else {
             titleArtistArray2D = songCollection.createTableElems(artistQuery); // Takes artist query
-
         }
 
         String[] columnNames = { "Title", "Artist" };
-
         table = new JTable(titleArtistArray2D, columnNames);
         centerPanel.getViewport().add(table);
-
-        updateUI(); // needed?
-
+        updateUI();
     }
 
     /** A inner listener class for buttons and textfields **/
     class MyButtonListener implements ActionListener {
 
-        /** Specifies what should happen when each button is pressed
-         *
+        /**
+         * Specifies what should happen when each button is pressed
          * @param e action event (like pressing a button)
          */
         public void actionPerformed(ActionEvent e) {
@@ -161,15 +150,10 @@ public class MPlayerPanel extends JPanel {
 
                     // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
                     songCollection.loadSongsRecursive(dir.getPath()); // I added this
-                    // Need to do now recursively
-
 
                     displaySongs(""); // I added this. This will update our titleArtistArray2D too now.
                     // Initial artist query will be an empty string, which displays all songs in lib.
                     updateUI(); // starter code
-
-                    System.out.println(dir);
-
                 }
             }
 
@@ -184,38 +168,29 @@ public class MPlayerPanel extends JPanel {
                 String songArtist = titleArtistArray2D[selectedSong][1];
                 songCurrent = songCollection.getSong(songArtist, songTitle);
 
-                System.out.println("Song to play: " + songCurrent.toString());
-
-
                 // Start a new thread
                 String filename = songCurrent.getFilename();
                 System.out.println(filename);
                 currThread = new PlayerThread(filename);
                 currThread.start();
 
-
-            } else if (e.getSource() == stopButton) { // to stop the song
+            }
+            else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
-
-                System.out.println("Stopping thread.");
                 ((PlayerThread) currThread).player.close();
                 currThread.interrupt();
 
-
-
-            } else if (e.getSource() == exitButton) { // exit
+            }
+            else if (e.getSource() == exitButton) { // exit
                 System.exit(0);
             }
 
             else if (e.getSource() == searchButton) { // search by artist
 
                 boolean exists = false;
-
-
-                // System.out.println("search Artist button");
                 String searchArtist = searchBox.getText();
                 if (searchArtist.matches("")) {
-                    displaySongs(searchArtist); // SearchArtist == "" and the displaySongs method will return all entries in library.
+                    displaySongs(searchArtist); // Depending on whether this is empty, displaySongs will use one of two createTableElems methods.
                 }
 
                 else {
@@ -236,7 +211,6 @@ public class MPlayerPanel extends JPanel {
 
                     }
                 }
-
             }
         } // actionPerformed
     } // ButtonListener
@@ -262,18 +236,14 @@ public class MPlayerPanel extends JPanel {
                 e.getMessage();
             }
         }
-
         public void run() {
             try {
                 player.play();
-
             }
             catch (Exception e) {
                 e.getMessage();
             }
         }
-
-
     }
 }
 
