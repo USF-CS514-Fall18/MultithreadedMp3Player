@@ -194,12 +194,13 @@ public class SongCollection {
      * Used in the MPlayerPanel class
      * @return arr2D a 2D String array
      *
+     ** I am Overloading this method name because I want to pass no arguments to this version.
+     * (artistQuery might be an empty String...)
+     ** This way, I can return a version of the 2D Array where all items are displayed (default case)
+     ** The title and artist from all entries in songs SongCollection are added to the 2D array, which is returned.
+     *
      * */
     public String[][] createTableElems() {
-        // artistname might be blank...
-        // If so, call this version of createTableElems.
-        // It will create a FULL SIZED 2D array (all songs).
-
         int tableSize = getSongsSize();
         //System.out.println("Nested Map Size: " + tableSize);
 
@@ -217,12 +218,21 @@ public class SongCollection {
        return arr2D;
     }
 
+    /**
+     * Creates a 2D array with two columns and enough rows for all the songs
+     * Used in the MPlayerPanel class
+     * @param artistQuery the String search item. Used in recursive getPartialMatch method.
+     * @return arr2D a 2D String array
+     *
+     ** I am Overloading this method name because I want to pass one argument (the search query) to this.
+     *         // getPartialMatch helps us find:
+     *         // - if the name matches some artist name in songs exactly, or
+     *         // - if the name matches some artist name in songs partially
+     * Then, the title and artist from these entries in songs SongCollection are added to the 2D array, which is returned.
+     *
+     * */
     public String[][] createTableElems(String artistQuery) {
-        // Overloading this method name because I want to pass an argument (the search query) to this.
-        // It will return a NARROWED DOWN 2D array (only songs matching artistQuery).
-        // Artist will be found either:
-        // - if the name matches exactly, or
-        // - if the name matches partially - using helper function testPartialMatch
+        //
 
         int tableSize = getSongsSize();
         //System.out.println("Nested Map Size: " + tableSize);
@@ -244,11 +254,20 @@ public class SongCollection {
         return arr2D;
     }
 
+    /**
+     * Helper function getPartialMatch - Recursive function
+     * @param query the String we are searching for
+     * @param s the String that exists in the list of Artist names
+     *
+     * @return true if there is a partial or full match, or false if there is not.
+     *
+     * This method compares two strings, recursively.
+     * Searches through smaller and smaller substrings of existing String s, and finds out if
+     * our search query matches it.
+     * Note, this fxn doesnt handle case where query == ""...I handle that in MPlayerPanel play button.
+     *
+     * */
     public boolean getPartialMatch(String query, String s) {
-        // Determines if a query string is a partial match to another string (s)
-        // (Used for the Artist name search query)
-        // Recursive function
-        // return (songs.containsKey(artistName));
 
         // Base case - if query name is longer than itemName
         if (query.length() > s.length()) {
@@ -256,21 +275,18 @@ public class SongCollection {
         }
 
         // Base case - query is empty or itemName is empty - false
-        if (query.length() == 0 || s.length() == 0) {
+        if (s.length() == 0) {
             return false;
         }
 
         // Base case - query and itemName match - true
-        if (query.matches(s)) {
+        if (query.equals(s)) {
             return true;
         }
 
         // Recursive case - don't match, but len > 0 so call the function again:
-        return getPartialMatch(query, s.substring(0, s.length()-1));
+        return getPartialMatch(query, s.substring(0, s.length() - 1)); // Checks smaller and smaller substrings of s
 
-
-
-        // return false;
     }
 
     /** Getter for all artists
@@ -279,8 +295,6 @@ public class SongCollection {
     public Set<String> getAllArtists() {
         return songs.keySet();
     }
-
-
 
 }
 
