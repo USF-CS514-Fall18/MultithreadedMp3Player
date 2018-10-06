@@ -80,13 +80,8 @@ public class Song  {
             player.play();
         } catch (JavaLayerException e) {
             System.out.println("JavaLayerException.");
+            e.printStackTrace();
         }
-    }
-    public void stop() {
-        // FILL IN CODE
-
-        // player.close(); // Doesn't work
-
     }
 
     /** Feel free to add other methods as needed */
@@ -102,6 +97,10 @@ public class Song  {
      */
     public String getArtist() {
         return artist;
+    }
+
+    public String getFilename() {
+        return filename;
     }
 
 }
