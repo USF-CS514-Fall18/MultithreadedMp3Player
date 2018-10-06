@@ -9,8 +9,6 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.*;
 import java.io.*;
-import java.util.Scanner;
-
 
 /** Class Song - represents a song in the SongCollection.
  *  A Song object should store a title, an artist, and
@@ -36,13 +34,10 @@ public class Song  {
 
         try {
             File f = new File(filename);
-
             FileInputStream fStream = new FileInputStream(filename);
             BufferedInputStream bStream = new BufferedInputStream(fStream);
 
             player = new Player(bStream);
-
-
             AudioFile audioFile = AudioFileIO.read(f);
             Tag tag = audioFile.getTag();
 
@@ -99,8 +94,10 @@ public class Song  {
         return artist;
     }
 
+    /** Return the filename of the song - I added this - OS
+     * @return title
+     */
     public String getFilename() {
         return filename;
     }
-
 }
