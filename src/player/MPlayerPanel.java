@@ -160,7 +160,10 @@ public class MPlayerPanel extends JPanel {
                     File dir = fc.getSelectedFile();
 
                     // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
-                    songCollection.loadSongs(dir.getPath()); // I added this
+                    songCollection.loadSongsRecursive(dir.getPath()); // I added this
+                    // Need to do now recursively
+
+
                     displaySongs(""); // I added this. This will update our titleArtistArray2D too now.
                     // Initial artist query will be an empty string, which displays all songs in lib.
                     updateUI(); // starter code
