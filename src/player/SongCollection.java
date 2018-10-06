@@ -213,25 +213,16 @@ public class SongCollection {
                 arr2D[k][1] = artist;
                 k++;
             }
-
         }
-
-        // Print 2D array:
-//        System.out.println("Final 2D array...");
-//        for (int i = 0; i < arr2D.length; i++) {
-//            for (int j = 0; j < arr2D[i].length; j++) {
-//                System.out.print(arr2D[0][j] + " ");
-//                System.out.println(arr2D[1][j]);
-//            }
-
-        //}
-
        return arr2D;
     }
 
     public String[][] createTableElems(String artistQuery) {
         // Overloading this method name because I want to pass an argument (the search query) to this.
         // It will return a NARROWED DOWN 2D array (only songs matching artistQuery).
+        // Artist will be found either:
+        // - if the name matches exactly, or
+        // - if the name matches partially - using helper function testPartialMatch
 
         int tableSize = getSongsSize();
         //System.out.println("Nested Map Size: " + tableSize);
@@ -241,7 +232,7 @@ public class SongCollection {
         int k = 0;
         for (String artist : songs.keySet()) { // Works
 
-            if (artist.equals(artistQuery)) {
+            if (getPartialMatch(artistQuery, artist)) { // Replace this with my recursive function
 
                 for (String title : songs.get(artist).keySet()) {
                     arr2D[k][0] = title;
@@ -249,12 +240,47 @@ public class SongCollection {
                     k++;
                 }
             }
-
         }
-
-
         return arr2D;
     }
+
+    public boolean getPartialMatch(String query, String s) {
+        // Determines if a query string is a partial match to another string (s)
+        // (Used for the Artist name search query)
+        // Recursive function
+        // return (songs.containsKey(artistName));
+
+        // Base case - if query name is longer than itemName
+        if (query.length() > s.length()) {
+            return false;
+        }
+
+        // Base case - query is empty or itemName is empty - false
+        if (query.length() == 0 || s.length() == 0) {
+            return false;
+        }
+
+        // Base case - query and itemName match - true
+        if (query.matches(s)) {
+            return true;
+        }
+
+        // Recursive case - don't match, but len > 0 so call the function again:
+        return getPartialMatch(query, s.substring(0, s.length()-1));
+
+
+
+        // return false;
+    }
+
+    /** Getter for all artists
+    @return Set of al artist names (String)
+     */
+    public Set<String> getAllArtists() {
+        return songs.keySet();
+    }
+
+
 
 }
 
