@@ -180,11 +180,11 @@ public class MPlayerPanel extends JPanel {
 
 
                 // Start a new thread
-                if (currThread == null) {
-                    currThread = new MyThread(songCurrent);
-                    currThread.start();
-                    // currThread.run();
-                }
+                // if (currThread == null) {
+                currThread = new MyThread(songCurrent); // Every time the start button is pressed we create a new thread
+                currThread.start();
+                // currThread.run();
+
 
                 //songCurrent.play();
 
@@ -193,10 +193,12 @@ public class MPlayerPanel extends JPanel {
                 // FILL IN CODE
                 // Do we need to do songCollection.method?? Why can't I access this Song object.
                 // songCurrent.stop(); // This does not work!!
-                if (currThread.isAlive()) {
-                    System.out.println("Interrupting thread.");
-                    currThread.interrupt();
-                }
+                // if (currThread.isAlive()) {
+                System.out.println("Quitting thread.");
+                //currThread.quit();
+                currThread.interrupt();
+                // }
+
 
 
 
@@ -239,27 +241,36 @@ public class MPlayerPanel extends JPanel {
     } // ButtonListener
 
     /**
-     *     Subclass Thread. The Thread class itself implements Runnable, though its run method does nothing.
-     *     An application can subclass Thread, providing its own implementation of run, as in the HelloThread example
+     *     Subclass Thread. Thread creation by extending the Thread class
+     *     I am overriding run and adding my own method, quit.
+     *
      *     https://docs.oracle.com/javase/tutorial/essential/concurrency/runthread.html
      *     */
 
     public class MyThread extends Thread {
         private Song song;
+        private String threadName;
 
         public MyThread(Song song) {
             this.song = song;
+            //start();
         }
+
 
         @Override
         public void run() {
-            System.out.println("Mew thread created!");
+            System.out.println("Mew thread running!");
             song.play();
 
         }
+
         @Override
         public void interrupt() {
-            
+
+            if (this==Thread.currentThread()) {
+                System.out.println("Interrupting song usting Song stop method");
+                this.interrupt();
+            }
         }
 
     }
