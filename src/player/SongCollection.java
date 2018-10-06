@@ -174,10 +174,10 @@ public class SongCollection {
         return res;
     }
 
-    /** The following methods are moslty for Part 2: */
+    /** The following methods are mostly for Part 2: */
 
-    /** Finds all .mp3 files in a given directory, creates Songs from them and adds them to this collection
-     * Note you are not allowed to use class File; You are required to use classes from nio package we discussed in class.
+    /** I made method loadSongsRecursive
+     * Finds all .mp3 files in a given directory, creates Songs from them and adds them to this collection
      * @param dir Name of the project directory that contains mp3 files
      *
      * They should be in order of artist (key)
@@ -212,7 +212,7 @@ public class SongCollection {
                     }
                 }
                 else {
-                    // If item is a directory
+                    // If item is a directory, get recursive!
                     loadSongsRecursive(p.toString());
                 }
             }
@@ -231,7 +231,6 @@ public class SongCollection {
     public int getSongsSize() {
         int size = 0;
         for (String artist : songs.keySet()) { // Works
-
             size += songs.get(artist).size();
         }
         return size;
@@ -280,18 +279,13 @@ public class SongCollection {
      *
      * */
     public String[][] createTableElems(String artistQuery) {
-        //
 
         int tableSize = getSongsSize();
-        //System.out.println("Nested Map Size: " + tableSize);
-
         String[][] arr2D = new String[tableSize][2];
-
         int k = 0;
-        for (String artist : songs.keySet()) { // Works
 
-            if (getPartialMatch(artistQuery, artist)) { // Replace this with my recursive function
-
+        for (String artist : songs.keySet()) {
+            if (getPartialMatch(artistQuery, artist)) {
                 for (String title : songs.get(artist).keySet()) {
                     arr2D[k][0] = title;
                     arr2D[k][1] = artist;
@@ -316,34 +310,27 @@ public class SongCollection {
      *
      * */
     public boolean getPartialMatch(String query, String s) {
-
-        // Base case - if query name is longer than itemName
+        // Base case - if query name is longer than itemName - false (halts immediately)
         if (query.length() > s.length()) {
             return false;
         }
-
         // Base case - query is empty or itemName is empty - false
         if (s.length() == 0) {
             return false;
         }
-
         // Base case - query and itemName match - true
         if (query.equals(s)) {
             return true;
         }
-
         // Recursive case - don't match, but len > 0 so call the function again:
         return getPartialMatch(query, s.substring(0, s.length() - 1)); // Checks smaller and smaller substrings of s
-
     }
 
     /** Getter for all artists
-    @return Set of al artist names (String)
+    @return Set<String> Set of all artist names
      */
     public Set<String> getAllArtists() {
         return songs.keySet();
     }
-
-
 }
 
