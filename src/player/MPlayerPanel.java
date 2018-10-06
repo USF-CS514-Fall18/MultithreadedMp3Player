@@ -182,7 +182,7 @@ public class MPlayerPanel extends JPanel {
                 // Start a new thread
                 // if (currThread == null) {
                 currThread = new MyThread(songCurrent); // Every time the start button is pressed we create a new thread
-                currThread.start();
+                // currThread.start();
                 // currThread.run();
 
 
@@ -253,7 +253,7 @@ public class MPlayerPanel extends JPanel {
 
         public MyThread(Song song) {
             this.song = song;
-            //start();
+            start();
         }
 
 
