@@ -9,6 +9,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -156,6 +157,7 @@ public class MPlayerPanel extends JPanel {
                     // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
                     songCollection.loadSongs(dir.getPath()); // I added this
                     displaySongs(""); // I added this. This will update our titleArtistArray2D too now.
+                    // Initial artist query will be an empty string, which displays all songs in lib.
                     updateUI(); // starter code
 
                     System.out.println(dir);
@@ -166,31 +168,35 @@ public class MPlayerPanel extends JPanel {
             else if (e.getSource() == playButton) { // for playing the song
 
                 selectedSong = table.getSelectedRow(); // Gives us an integer # of the row
-
                 System.out.println(selectedSong);
 
                 // FILL IN CODE: play selected song in a separate thread (Given the integer # of row)
 
                 String songTitle = titleArtistArray2D[selectedSong][0];
                 String songArtist = titleArtistArray2D[selectedSong][1];
-
-                System.out.println("Extracted song title: " + songTitle);
-                System.out.println("Extracted song artist: " + songArtist);
-
-
-
-                System.out.println("// Now search for song title!");
                 songCurrent = songCollection.getSong(songArtist, songTitle);
 
-
                 System.out.println("Song to play: " + songCurrent.toString());
-                songCurrent.play();
+
+
+                // Start a new thread
+                if (currThread == null) {
+                    currThread = new MyThread(songCurrent);
+                    currThread.start();
+                    // currThread.run();
+                }
+
+                //songCurrent.play();
 
 
             } else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
                 // Do we need to do songCollection.method?? Why can't I access this Song object.
-                songCurrent.stop(); // This does not work!!
+                // songCurrent.stop(); // This does not work!!
+                if (currThread.isAlive()) {
+                    System.out.println("Interrupting thread.");
+                    currThread.interrupt();
+                }
 
 
 
@@ -231,5 +237,31 @@ public class MPlayerPanel extends JPanel {
             }
         } // actionPerformed
     } // ButtonListener
+
+    /**
+     *     Subclass Thread. The Thread class itself implements Runnable, though its run method does nothing.
+     *     An application can subclass Thread, providing its own implementation of run, as in the HelloThread example
+     *     https://docs.oracle.com/javase/tutorial/essential/concurrency/runthread.html
+     *     */
+
+    public class MyThread extends Thread {
+        private Song song;
+
+        public MyThread(Song song) {
+            this.song = song;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("Mew thread created!");
+            song.play();
+
+        }
+        @Override
+        public void interrupt() {
+            
+        }
+
+    }
 }
 
