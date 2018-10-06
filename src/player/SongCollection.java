@@ -174,6 +174,54 @@ public class SongCollection {
         return res;
     }
 
+    /** The following methods are moslty for Part 2: */
+
+    /** Finds all .mp3 files in a given directory, creates Songs from them and adds them to this collection
+     * Note you are not allowed to use class File; You are required to use classes from nio package we discussed in class.
+     * @param dir Name of the project directory that contains mp3 files
+     *
+     * They should be in order of artist (key)
+     */
+    public void loadSongsRecursive(String dir) {
+        // FILL IN CODE - Largely Copying from the DirectoryStreamExample.java and PathExample.java(Karpenko's examples)
+        // Gets all files and subdirectories in a given directory
+
+        Path path = Paths.get(dir); // Made a new path, arg is the String directory name
+        try (DirectoryStream<Path> filesList = Files.newDirectoryStream(path.toAbsolutePath())) {
+
+            for (Path p : filesList) {
+                if (!(p.toFile().isDirectory())) { // If item is not a directory
+                    if (isMP3(p.toString())) { // If file is an mp3, continue
+
+                        Song newSong = new Song(p.toString()); // Create a new song object.
+                        String newSongTitle = newSong.getTitle();
+                        String newSongArtist = newSong.getArtist();
+
+                        if (songs.containsKey(newSong.getArtist())) {
+                            // Artist has already been added. Add new entry to existing "small" map.
+                            Map<String, Song> smallMap = songs.get(newSongArtist);
+                            smallMap.put(newSongTitle, newSong);
+
+                        } else {
+                            // Artist has not yet been added. So make a new small TreeMap and add new entry to it.
+                            TreeMap<String, Song> smallMap = new TreeMap<>();
+                            smallMap.put(newSongTitle, newSong);
+                            songs.put(newSongArtist, smallMap);
+
+                        }
+                    }
+                }
+                else {
+                    // If item is a directory
+                    loadSongsRecursive(p.toString());
+                }
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Cannot open directory.");
+        }
+    }
+
     /**
      * getSongsSize is a helper function for createTableElems().
      * Used for constructing our 2D Array in createTableElems()
@@ -295,6 +343,7 @@ public class SongCollection {
     public Set<String> getAllArtists() {
         return songs.keySet();
     }
+
 
 }
 
