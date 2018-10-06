@@ -202,10 +202,14 @@ public class MPlayerPanel extends JPanel {
 
                 boolean exists = false;
 
-                do {
-                    // System.out.println("search Artist button");
-                    String searchArtist = searchBox.getText();
 
+                // System.out.println("search Artist button");
+                String searchArtist = searchBox.getText();
+                if (searchArtist.matches("")) {
+                    displaySongs(searchArtist); // SearchArtist == "" and the displaySongs method will return all entries in library.
+                }
+
+                else {
                     for (String artist : songCollection.getAllArtists()) {
                         if (songCollection.getPartialMatch(searchArtist, artist)) {
                             exists = true;
@@ -216,18 +220,16 @@ public class MPlayerPanel extends JPanel {
                         System.out.println(searchArtist);
                         displaySongs(searchArtist); // I added this. This will update our titleArtistArray2D too now.
                         updateUI(); // starter code®
-                        break;
+
                     }
-
-
-
                     else {
-                        System.out.println("Your entry does not match any artist names. Try again: ");
-                        break;
-                    }
+                        System.out.println("Your entry does not match any artist names. Try again. ");
 
-                } while (exists);
+                    }
+                }
+
             }
         } // actionPerformed
     } // ButtonListener
 }
+
