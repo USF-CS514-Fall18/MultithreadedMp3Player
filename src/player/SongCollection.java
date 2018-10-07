@@ -316,18 +316,37 @@ public class SongCollection {
 
         System.out.println("Tailmap,starting: (takes params)" + mapToString(tailMap));
 
-        int k = 0;
+
+
+        SortedMap<String, String> tailMapNarrowed = new TreeMap<>();
+
+
         for (String title : tailMap.keySet()) {
+            String artist = tailMap.get(title);
+            if (getPartialMatch(artistQuery, artist)) {
+                tailMapNarrowed.put(title, artist);
+            }
+        }
+
+        
+        System.out.println("Tailmap, Narrowed: (takesparams)" + mapToString(tailMapNarrowed));
+
+
+
+
+
+        // Now just add tailmap to the 2D array
+        // Array is [Title][Artist]
+        int k = 0;
+        for (String title : tailMapNarrowed.keySet()) {
             arr2D[k][0] = title;
             arr2D[k][1] = tailMap.get(title); // artist
             k++;
+
         }
 
-        String test = "Fwdslxsh";
+        System.out.println("Arr2D " + arr2D);
 
-        SortedMap<String, String> tailMapNarrowed = tailMap.tailMap(test, true);
-
-        System.out.println("Tailmap, Narrowed: (takesparams)" + mapToString(tailMapNarrowed));
 
 //        System.out.println("Songs tree: (takes artistQuery) " + songsTree.toString());
 //
