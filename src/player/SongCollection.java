@@ -21,6 +21,7 @@ import java.util.*;
 
 public class SongCollection {
     private Map<String, Map<String, Song>> songs;
+    private TreeMap<String, String> songTree;
 
     /** Constructor of class SongCollection
      * */
@@ -105,34 +106,26 @@ public class SongCollection {
      * (Inner level search)
      * */
     public Song getSong(String artistName, String songTitle) {
-        Song songObject = null;
 
-        for (String name : songs.keySet()) { // Iterate through artist names
-
-            for (String title : songs.get(name).keySet()) { // Iterate through song names
-
-                if (artistName.matches(name) && songTitle.matches(title))  {
-                    songObject = songs.get(artistName).get(title); // Go through both TreeMap layers to get the song object
-                }
+        if (songs.containsKey(artistName)) {
+            if (songs.get(artistName).containsKey(songTitle)) {
+                return songs.get(artistName).get(songTitle);
             }
         }
-        return songObject;
+        return null;
     }
 
     /** @param artistName String representation of the artist name
      * @return songTitleList, which is an arrayList of song titles by the artist.
      * */
-    public ArrayList<String> getSongTitleList(String artistName) {
+    public ArrayList<String> getSongTitleList(String artistName) { /// Fixed (10/6)
 
         ArrayList<String> songTitleList = new ArrayList<>();
 
         // Search through songs TreeMap
-        for (String aName : songs.keySet()) {
-            if (aName.equals(artistName)) {
-                for (String title : songs.get(aName).keySet()) { // Find all titles.
-                    songTitleList.add(title); // And add them to the ArrayList
-                }
-            }
+        for (String titleName : songs.get(artistName).keySet()) {
+            songTitleList.add(titleName); // And add them to the ArrayList
+
         }
         return songTitleList;
     }
@@ -144,13 +137,13 @@ public class SongCollection {
 
         for (Map.Entry<String, Map<String, Song>> artistEntry : songs.entrySet()) {
             String artist = artistEntry.getKey();
-            res += artist + ": \n";
+            res += artist + System.lineSeparator();
 
             for (Map.Entry<String, Song> titleEntry : artistEntry.getValue().entrySet()) {
                 String title = titleEntry.getKey();
-                res +=  " - " + title + "\n";
+                res +=  " - " + title + System.lineSeparator();
             }
-            res += "\n";
+            res += System.lineSeparator();
         }
         return res;
     }
@@ -197,6 +190,8 @@ public class SongCollection {
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
 
+                        songTree.put(newSongTitle, newSongArtist);
+
                         if (songs.containsKey(newSong.getArtist())) {
                             // Artist has already been added. Add new entry to existing "small" map.
                             Map<String, Song> smallMap = songs.get(newSongArtist);
@@ -236,66 +231,101 @@ public class SongCollection {
         return size;
     }
 
-    /**
-     * Creates a 2D array with two columns and enough rows for all the songs
-     * Used in the MPlayerPanel class
-     * @return arr2D a 2D String array
-     *
-     ** I am Overloading this method name because I want to pass no arguments to this version.
-     * (artistQuery might be an empty String...)
-     ** This way, I can return a version of the 2D Array where all items are displayed (default case)
-     ** The title and artist from all entries in songs SongCollection are added to the 2D array, which is returned.
-     *
-     * */
-    public String[][] createTableElems() {
-        int tableSize = getSongsSize();
-        //System.out.println("Nested Map Size: " + tableSize);
-
-        String[][] arr2D = new String[tableSize][2];
-
-        int k = 0;
-        for (String artist : songs.keySet()) { // Works
-
-            for (String title : songs.get(artist).keySet()) {
-                arr2D[k][0] = title;
-                arr2D[k][1] = artist;
-                k++;
-            }
-        }
-       return arr2D;
-    }
-
-    /**
-     * Creates a 2D array with two columns and enough rows for all the songs
-     * Used in the MPlayerPanel class
-     * @param artistQuery the String search item. Used in recursive getPartialMatch method.
-     * @return arr2D a 2D String array
-     *
-     ** I am Overloading this method name because I want to pass one argument (the search query) to this.
-     *         // getPartialMatch helps us find:
-     *         // - if the name matches some artist name in songs exactly, or
-     *         // - if the name matches some artist name in songs partially
-     * Then, the title and artist from these entries in songs SongCollection are added to the 2D array, which is returned.
-     *
-     * */
     public String[][] createTableElems(String artistQuery) {
-
         int tableSize = getSongsSize();
         String[][] arr2D = new String[tableSize][2];
-        int k = 0;
 
+        int k = 0;
         for (String artist : songs.keySet()) {
             if (getPartialMatch(artistQuery, artist)) {
                 for (String title : songs.get(artist).keySet()) {
                     arr2D[k][0] = title;
                     arr2D[k][1] = artist;
                     k++;
+
+
+                    //Set entries = treeMap.entrySet();
+
+                    //System.out.println("Tail map: "  +  treeMap.tailMap(artistQuery));
+
+//        int k = 0;
+//        for (String title : songs.get(artistQuery).keySet()) {
+//            result2DArr[k][0] = title;
+//            result2DArr[k][1] = artistQuery;
+//            k++;
+//        }
+                    TreeMap<String, String> treeMap = new TreeMap<String, String>(); // Empty treemap
+                    //treeMap.putAll(songs.keySet(), songs.entrySet());
+
+                    System.out.println("songsTree + " + songTree);
+
+                    // System.out.println("Restlt 2D ARr" + result2DArr.toString());
                 }
+
+//    /**
+//     * Creates a 2D array with two columns and enough rows for all the songs
+//     * Used in the MPlayerPanel class
+//     * @return arr2D a 2D String array
+//     *
+//     ** I am Overloading this method name because I want to pass no arguments to this version.
+//     * (artistQuery might be an empty String...)
+//     ** This way, I can return a version of the 2D Array where all items are displayed (default case)
+//     ** The title and artist from all entries in songs SongCollection are added to the 2D array, which is returned.
+//     *
+//     * */
+//    public String[][] createTableElems() {
+//        int tableSize = getSongsSize();
+//        //System.out.println("Nested Map Size: " + tableSize);
+//
+//        String[][] arr2D = new String[tableSize][2];
+//
+//        int k = 0;
+//        for (String artist : songs.keySet()) { // Works
+//
+//            for (String title : songs.get(artist).keySet()) {
+//                arr2D[k][0] = title;
+//                arr2D[k][1] = artist;
+//                k++;
+//            }
+//        }
+//       return arr2D;
+//    }
+//
+//    /**
+//     * Creates a 2D array with two columns and enough rows for all the songs
+//     * Used in the MPlayerPanel class
+//     * @param artistQuery the String search item. Used in recursive getPartialMatch method.
+//     * @return arr2D a 2D String array
+//     *
+//     ** I am Overloading this method name because I want to pass one argument (the search query) to this.
+//     *         // getPartialMatch helps us find:
+//     *         // - if the name matches some artist name in songs exactly, or
+//     *         // - if the name matches some artist name in songs partially
+//     * Then, the title and artist from these entries in songs SongCollection are added to the 2D array, which is returned.
+//     *
+//     * */
+//    public String[][] createTableElems(String artistQuery) {
+//
+//        int tableSize = getSongsSize();
+//        String[][] arr2D = new String[tableSize][2];
+//        int k = 0;
+//
+//        for (String artist : songs.keySet()) {
+//            if (getPartialMatch(artistQuery, artist)) {
+//                for (String title : songs.get(artist).keySet()) {
+//                    arr2D[k][0] = title;
+//                    arr2D[k][1] = artist;
+//                    k++;
+//                }
+//            }
+//        }
+//        return arr2D;
+//    }
             }
         }
+
         return arr2D;
     }
-
     /**
      * Helper function getPartialMatch - Recursive function
      * @param query the String we are searching for
@@ -332,5 +362,8 @@ public class SongCollection {
     public Set<String> getAllArtists() {
         return songs.keySet();
     }
+
+
+
 }
 
