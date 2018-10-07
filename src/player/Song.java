@@ -19,7 +19,7 @@ public class Song  {
     private String artist;
     private String filename;
 
-    public Player player;
+    private Player player;
 
     /** Constructor of class Song.
      * Takes the name of the file that contains the mp3 of this song,
@@ -46,7 +46,6 @@ public class Song  {
 
         } catch ( IOException | TagException | CannotReadException | ReadOnlyFileException | InvalidAudioFrameException | JavaLayerException e) {
             System.out.println("Some exception occurred when reading from file.");
-            e.printStackTrace();
         }
     }
 
@@ -75,7 +74,6 @@ public class Song  {
             player.play();
         } catch (JavaLayerException e) {
             System.out.println("JavaLayerException.");
-            e.printStackTrace();
         }
     }
 
