@@ -21,11 +21,13 @@ import java.util.*;
 
 public class SongCollection {
     private Map<String, Map<String, Song>> songs;
+    private TreeMap<String, String> songsTree; // I added this
 
     /** Constructor of class SongCollection
      * */
     public SongCollection() {
         songs = new TreeMap<>();
+        songsTree = new TreeMap<>(); // I added this
     }
 
     /** Finds all .mp3 files in a given directory, creates Songs from them and adds them to this collection
@@ -188,6 +190,8 @@ public class SongCollection {
                         Song newSong = new Song(p.toString()); // Create a new song object.
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
+                        
+                        songsTree.put(newSongTitle, newSongArtist);
 
                         if (songs.containsKey(newSong.getArtist())) {
                             // Artist has already been added. Add new entry to existing "small" map.
@@ -241,8 +245,6 @@ public class SongCollection {
      * */
     public String[][] createTableElems() {
         int tableSize = getSongsSize();
-        //System.out.println("Nested Map Size: " + tableSize);
-
         String[][] arr2D = new String[tableSize][2];
 
         int k = 0;
@@ -251,9 +253,28 @@ public class SongCollection {
             for (String title : songs.get(artist).keySet()) {
                 arr2D[k][0] = title;
                 arr2D[k][1] = artist;
+
+                //songsTree.put(title, artist);
+
                 k++;
             }
         }
+        
+        
+
+        //System.out.println("Songs tree: () " + songsTree.toString());
+
+        // Let's morph songsTree into a 2D array!
+
+//        int count = 0;
+//        for (Map.Entry<String, String> entry : songsTree.entrySet()) {
+//            arr2D[count][0] = entry.getKey();
+//            arr2D[count][1] = entry.getValue();
+//            count++;
+//        }
+//
+//        System.out.println("Arr2D" + arr2D);
+
         return arr2D;
     }
 
@@ -281,10 +302,28 @@ public class SongCollection {
                 for (String title : songs.get(artist).keySet()) {
                     arr2D[k][0] = title;
                     arr2D[k][1] = artist;
+
+                    //songsTree.put(title, artist);
+
                     k++;
                 }
             }
         }
+
+//        System.out.println("Songs tree: (takes artistQuery) " + songsTree.toString());
+//
+//        // Let's morph songsTree into a 2D array!
+//
+//        int count = 0;
+//        for (Map.Entry<String, String> entry : songsTree.entrySet()) {
+//            arr2D[count][0] = entry.getKey();
+//            arr2D[count][1] = entry.getValue();
+//            count++;
+//        }
+//
+//        System.out.println("Arr2D" + arr2D);
+
+
         return arr2D;
     }
 
