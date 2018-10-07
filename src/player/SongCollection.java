@@ -21,13 +21,11 @@ import java.util.*;
 
 public class SongCollection {
     private Map<String, Map<String, Song>> songs;
-    private TreeMap<String, String> songsTree; // I added this
 
     /** Constructor of class SongCollection
      * */
     public SongCollection() {
         songs = new TreeMap<>();
-        songsTree = new TreeMap<>(); // I added this
     }
 
     /** Finds all .mp3 files in a given directory, creates Songs from them and adds them to this collection
@@ -51,8 +49,6 @@ public class SongCollection {
                         Song newSong = new Song(file.toString()); // Create a new song object.
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
-
-                        songsTree.put(newSongTitle, newSongArtist);
 
                         if (songs.containsKey(newSong.getArtist())) {
                             // Artist has already been added. Add new entry to existing "small" map.
@@ -122,12 +118,10 @@ public class SongCollection {
      * */
     public ArrayList<String> getSongTitleList(String artistName) {
 
-
         ArrayList<String> songTitleList = new ArrayList<>();
 
-        // Search through songs TreeMap
-        for (String titleName : songs.get(artistName).keySet()) {
-            songTitleList.add(titleName); // And add them to the ArrayList
+        for (String name : songs.keySet()) {
+            songTitleList.add(name); // And add them to the ArrayList
 
         }
         return songTitleList;
@@ -193,9 +187,6 @@ public class SongCollection {
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
 
-                        /// This did not work because identical keys were overwritten.
-                        songsTree.put(newSongTitle, newSongArtist);  // Adding <Title, Artist> to a TreeMap named songsTree
-
                         if (songs.containsKey(newSong.getArtist())) {
                             // Artist has already been added. Add new entry to existing "small" map.
                             Map<String, Song> smallMap = songs.get(newSongArtist);
@@ -245,27 +236,20 @@ public class SongCollection {
      ** This way, I can return a version of the 2D Array where all items are displayed (default case)
      ** The title and artist from all entries in songs SongCollection are added to the 2D array, which is returned.
      *
+     * I know these are not very efficient but I spent 5 hours trying to figure it out and sadly I have to go with my bad implementation. - OS
      * */
     public String[][] createTableElems() {
         int tableSize = getSongsSize();
         String[][] arr2D = new String[tableSize][2];
 
-        // KEYS ARE TITLES AND VALUES ARE ARTISTS
-        TreeMap<String, String> tailMap = new TreeMap<>();
-
-        for (String artist : songs.keySet()) {
-            for (String title : songs.get(artist).keySet()) {
-                tailMap.put(title, artist);
-            }
-        }
-
-        System.out.println("Tailmap: (noparams)" + mapToString(tailMap));
-
         int k = 0;
-        for (String title : tailMap.keySet()) {
-            arr2D[k][0] = title;
-            arr2D[k][1] = tailMap.get(title); // artist
-            k++;
+        for (String artist : songs.keySet()) { // Works
+
+            for (String title : songs.get(artist).keySet()) {
+                arr2D[k][0] = title;
+                arr2D[k][1] = artist;
+                k++;
+            }
         }
         return arr2D;
     }
@@ -287,67 +271,18 @@ public class SongCollection {
 
         int tableSize = getSongsSize();
         String[][] arr2D = new String[tableSize][2];
-
-        // KEYS ARE TITLES AND VALUES ARE ARTISTS
-        TreeMap<String, String> tailMap = new TreeMap<>();
+        int k = 0;
 
         for (String artist : songs.keySet()) {
-            for (String title : songs.get(artist).keySet()) {
-                tailMap.put(title, artist);
-            }
-        }
-
-        System.out.println("Tailmap,starting: (takes params)" + mapToString(tailMap));
-        TreeMap<String, String> tailMapNarrowed = new TreeMap<>();
-
-
-        for (String title : tailMap.keySet()) {
-            String artist = tailMap.get(title);
             if (getPartialMatch(artistQuery, artist)) {
-                tailMapNarrowed.put(title, artist);
+                for (String title : songs.get(artist).keySet()) {
+                    arr2D[k][0] = title;
+                    arr2D[k][1] = artist;
+                    k++;
+                }
             }
         }
-
-        // Delete later
-        // NavigableMap<String, String> tailMapNarrowedMore = tailMap.tailMap(artistQuery,true);
-        // System.out.println("Tailmap, Narrowed: (takesparams)" + mapToString(tailMapNarrowedMore));
-
-
-        // Now just add tailmap to the 2D array
-        // Array is [Title][Artist]
-        int k = 0;
-        for (String title : tailMapNarrowed.keySet()) {
-            arr2D[k][0] = title;
-            arr2D[k][1] = tailMap.get(title); // artist
-            k++;
-        }
-
-        System.out.println("Private songsTree = " + mapToString(songsTree));
-
-        SortedMap<String, String> songsTreeNarrow = new TreeMap<String, String>();
-
-
-        for (String title : songsTree.keySet()) {
-            String artist = songsTree.get(title);
-            if (getPartialMatch(artistQuery, artist)) {
-                songsTreeNarrow = songsTree.tailMap(artist);
-            }
-        }
-
-
-        System.out.println("Private songsTreeNarrow now = " + mapToString(songsTreeNarrow));
-
-        System.out.println("Arr2D " + arr2D);
-
         return arr2D;
-    }
-
-    public String mapToString(Map<String, String> tm) {
-        String out = "";
-        for (String s : tm.keySet()) {
-            out += s + ": " + tm.get(s) + System.lineSeparator();;
-        }
-        return out;
     }
 
     /**
