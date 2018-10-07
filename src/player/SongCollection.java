@@ -324,7 +324,16 @@ public class SongCollection {
 
         System.out.println("Private songsTree = " + mapToString(songsTree));
 
-        Map<String, String> songsTreeNarrow = songsTree.tailMap(artistQuery, true);
+        SortedMap<String, String> songsTreeNarrow = new TreeMap<String, String>();
+
+
+        for (String title : songsTree.keySet()) {
+            String artist = songsTree.get(title);
+            if (getPartialMatch(artistQuery, artist)) {
+                songsTreeNarrow = songsTree.tailMap(artist);
+            }
+        }
+
 
         System.out.println("Private songsTreeNarrow now = " + mapToString(songsTreeNarrow));
 
