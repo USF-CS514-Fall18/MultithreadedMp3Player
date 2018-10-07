@@ -34,8 +34,13 @@ import java.util.TreeMap;
 public class MPlayerPanel extends JPanel {
 
     private SongCollection songCollection; // collection of songs
+
     private String[][] titleArtistArray2D; // I added this
+
     private Song songCurrent; // I added this
+
+    //private String artistNameQuery = ""; // I added this - for searching for artist name
+
 
     JPanel topPanel, bottomPanel;
     JScrollPane centerPanel;
@@ -83,6 +88,7 @@ public class MPlayerPanel extends JPanel {
         playButton.addActionListener(new MyButtonListener());
         stopButton.addActionListener(new MyButtonListener());
 
+
         // add buttons and a textfield to the top panel
         topPanel.add(loadMp3Button);
         topPanel.add(searchBox);
@@ -110,35 +116,39 @@ public class MPlayerPanel extends JPanel {
 
     /** Shows songs in the table */
     public void displaySongs(String artistQuery) {
+
         // For part 2 of the lab, you would need to uncomment the code below
         // and provide createTableElems method in class SongCollection
         // FILL IN CODE:
 
         if (artistQuery.equals("")) {
+
             titleArtistArray2D = songCollection.createTableElems(); // a String[][] array (2D)
         }
-
         else {
             titleArtistArray2D = songCollection.createTableElems(artistQuery); // Takes artist query
+
         }
 
         String[] columnNames = { "Title", "Artist" };
+
         table = new JTable(titleArtistArray2D, columnNames);
         centerPanel.getViewport().add(table);
-        updateUI();
+
+        updateUI(); // needed?
+
     }
 
     /** A inner listener class for buttons and textfields **/
     class MyButtonListener implements ActionListener {
 
-        /**
-         * Specifies what should happen when each button is pressed
+        /** Specifies what should happen when each button is pressed
+         *
          * @param e action event (like pressing a button)
          */
         public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == loadMp3Button) { // for loading songs from mp3 files
-                System.out.println("Load mp3 button");
 
                 // read all the mp3 files from mp3 directory
                 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -150,9 +160,9 @@ public class MPlayerPanel extends JPanel {
 
                     // FILL IN CODE - Load songs into SongCollection songs from the given directory - Done
                     songCollection.loadSongsRecursive(dir.getPath()); // I added this
-
                     displaySongs(""); // I added this. This will update our titleArtistArray2D too now.
                     // Initial artist query will be an empty string, which displays all songs in lib.
+
                     updateUI(); // starter code
                 }
             }
@@ -160,8 +170,6 @@ public class MPlayerPanel extends JPanel {
             else if (e.getSource() == playButton) { // for playing the song
 
                 selectedSong = table.getSelectedRow(); // Gives us an integer # of the row
-                System.out.println(selectedSong);
-
                 // FILL IN CODE: play selected song in a separate thread (Given the integer # of row)
 
                 String songTitle = titleArtistArray2D[selectedSong][0];
@@ -170,18 +178,16 @@ public class MPlayerPanel extends JPanel {
 
                 // Start a new thread
                 String filename = songCurrent.getFilename();
-                System.out.println(filename);
                 currThread = new PlayerThread(filename);
                 currThread.start();
 
-            }
-            else if (e.getSource() == stopButton) { // to stop the song
+
+            } else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
                 ((PlayerThread) currThread).player.close();
                 currThread.interrupt();
 
-            }
-            else if (e.getSource() == exitButton) { // exit
+            } else if (e.getSource() == exitButton) { // exit
                 System.exit(0);
             }
 
@@ -190,7 +196,7 @@ public class MPlayerPanel extends JPanel {
                 boolean exists = false;
                 String searchArtist = searchBox.getText();
                 if (searchArtist.matches("")) {
-                    displaySongs(searchArtist); // Depending on whether this is empty, displaySongs will use one of two createTableElems methods.
+                    displaySongs(searchArtist); // SearchArtist == "" and the displaySongs method will return all entries in library.
                 }
 
                 else {
@@ -201,14 +207,12 @@ public class MPlayerPanel extends JPanel {
                     }
 
                     if (exists) {
-                        System.out.println(searchArtist);
-                        displaySongs(searchArtist); // I added this. This will update our titleArtistArray2D too now.
+                        displaySongs(searchArtist); // This will update our titleArtistArray2D now.
                         updateUI(); // starter code®
 
                     }
                     else {
                         System.out.println("Your entry does not match any artist names. Try again. ");
-
                     }
                 }
             }
@@ -217,7 +221,7 @@ public class MPlayerPanel extends JPanel {
 
     /**
      *     Subclass Thread. Thread creation by extending the Thread class
-     *     I am overriding run and adding my own method, quit.
+     *     Subclass PlayerThread overrides run() method and adds a constructor.
      *
      *     https://docs.oracle.com/javase/tutorial/essential/concurrency/runthread.html
      *     */
@@ -236,14 +240,17 @@ public class MPlayerPanel extends JPanel {
                 e.getMessage();
             }
         }
+
         public void run() {
             try {
                 player.play();
+
             }
             catch (Exception e) {
                 e.getMessage();
             }
         }
+
+
     }
 }
-
