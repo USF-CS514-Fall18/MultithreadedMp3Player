@@ -248,19 +248,26 @@ public class SongCollection {
         int tableSize = getSongsSize();
         String[][] arr2D = new String[tableSize][2];
 
-        int k = 0;
-        for (String artist : songs.keySet()) { // Works
 
+        // Lets' try tailMap with songs:
+
+        // KEYS ARE TITLES AND VALUES ARE ARTISTS
+        TreeMap<String, String> tailMap = new TreeMap<>();
+
+        for (String artist : songs.keySet()) {
             for (String title : songs.get(artist).keySet()) {
-                arr2D[k][0] = title;
-                arr2D[k][1] = artist;
-                k++;
+                tailMap.put(title, artist);
             }
         }
 
-        SortedMap<String, String> tailMap = songsTree.tailMap("");
+        System.out.println("Tailmap: (noparams)" + mapToString(tailMap));
 
-        System.out.println("Tailmap: (1)" + mapToString(tailMap));
+        int k = 0;
+        for (String title : tailMap.keySet()) {
+            arr2D[k][0] = title;
+            arr2D[k][1] = tailMap.get(title); // artist
+            k++;
+        }
 
 
 
@@ -297,23 +304,30 @@ public class SongCollection {
 
         int tableSize = getSongsSize();
         String[][] arr2D = new String[tableSize][2];
-        int k = 0;
+
+        // KEYS ARE TITLES AND VALUES ARE ARTISTS
+        TreeMap<String, String> tailMap = new TreeMap<>();
 
         for (String artist : songs.keySet()) {
-            if (getPartialMatch(artistQuery, artist)) {
-                for (String title : songs.get(artist).keySet()) {
-                    arr2D[k][0] = title;
-                    arr2D[k][1] = artist;
-                    k++;
-                }
+            for (String title : songs.get(artist).keySet()) {
+                tailMap.put(title, artist);
             }
+        }
+
+        System.out.println("Tailmap,starting: (takes params)" + mapToString(tailMap));
+
+        int k = 0;
+        for (String title : tailMap.keySet()) {
+            arr2D[k][0] = title;
+            arr2D[k][1] = tailMap.get(title); // artist
+            k++;
         }
 
         String test = "Fwdslxsh";
 
-        SortedMap<String, String> tailMap = songsTree.tailMap(test, true);
+        SortedMap<String, String> tailMapNarrowed = tailMap.tailMap(test, true);
 
-        System.out.println("Tailmap: (2)" + mapToString(tailMap));
+        System.out.println("Tailmap, Narrowed: (takesparams)" + mapToString(tailMapNarrowed));
 
 //        System.out.println("Songs tree: (takes artistQuery) " + songsTree.toString());
 //
