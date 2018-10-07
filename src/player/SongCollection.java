@@ -51,6 +51,8 @@ public class SongCollection {
                         Song newSong = new Song(file.toString()); // Create a new song object.
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
+                        
+                        songsTree.put(newSongTitle, newSongArtist);
 
                         if (songs.containsKey(newSong.getArtist())) {
                             // Artist has already been added. Add new entry to existing "small" map.
@@ -191,8 +193,8 @@ public class SongCollection {
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
 
-                        // This did not work because identical keys were overwritten.
-                        // songsTree.put(newSongArtist, newSongTitle);  // Adding <Artist, Title> to a TreeMap named songsTree
+                        /// This did not work because identical keys were overwritten.
+                        songsTree.put(newSongTitle, newSongArtist);  // Adding <Title, Artist> to a TreeMap named songsTree
 
                         if (songs.containsKey(newSong.getArtist())) {
                             // Artist has already been added. Add new entry to existing "small" map.
@@ -248,9 +250,6 @@ public class SongCollection {
         int tableSize = getSongsSize();
         String[][] arr2D = new String[tableSize][2];
 
-
-        // Lets' try tailMap with songs:
-
         // KEYS ARE TITLES AND VALUES ARE ARTISTS
         TreeMap<String, String> tailMap = new TreeMap<>();
 
@@ -268,22 +267,6 @@ public class SongCollection {
             arr2D[k][1] = tailMap.get(title); // artist
             k++;
         }
-
-
-
-        //System.out.println("Songs tree: () " + songsTree.toString());
-
-        // Let's morph songsTree into a 2D array!
-
-//        int count = 0;
-//        for (Map.Entry<String, String> entry : songsTree.entrySet()) {
-//            arr2D[count][0] = entry.getKey();
-//            arr2D[count][1] = entry.getValue();
-//            count++;
-//        }
-//
-//        System.out.println("Arr2D" + arr2D);
-
         return arr2D;
     }
 
@@ -315,9 +298,6 @@ public class SongCollection {
         }
 
         System.out.println("Tailmap,starting: (takes params)" + mapToString(tailMap));
-
-
-
         TreeMap<String, String> tailMapNarrowed = new TreeMap<>();
 
 
@@ -328,11 +308,9 @@ public class SongCollection {
             }
         }
 
-        
-        System.out.println("Tailmap, Narrowed: (takesparams)" + mapToString(tailMapNarrowed));
-
-
-
+        // Delete later
+        NavigableMap<String, String> tailMapNarrowedMore = tailMap.tailMap(artistQuery,true);
+        System.out.println("Tailmap, Narrowed: (takesparams)" + mapToString(tailMapNarrowedMore));
 
 
         // Now just add tailmap to the 2D array
@@ -342,25 +320,9 @@ public class SongCollection {
             arr2D[k][0] = title;
             arr2D[k][1] = tailMap.get(title); // artist
             k++;
-
         }
 
         System.out.println("Arr2D " + arr2D);
-
-
-//        System.out.println("Songs tree: (takes artistQuery) " + songsTree.toString());
-//
-//        // Let's morph songsTree into a 2D array!
-//
-//        int count = 0;
-//        for (Map.Entry<String, String> entry : songsTree.entrySet()) {
-//            arr2D[count][0] = entry.getKey();
-//            arr2D[count][1] = entry.getValue();
-//            count++;
-//        }
-//
-//        System.out.println("Arr2D" + arr2D);
-
 
         return arr2D;
     }
