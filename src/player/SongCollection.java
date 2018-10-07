@@ -51,7 +51,7 @@ public class SongCollection {
                         Song newSong = new Song(file.toString()); // Create a new song object.
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
-                        
+
                         songsTree.put(newSongTitle, newSongArtist);
 
                         if (songs.containsKey(newSong.getArtist())) {
@@ -309,8 +309,8 @@ public class SongCollection {
         }
 
         // Delete later
-        NavigableMap<String, String> tailMapNarrowedMore = tailMap.tailMap(artistQuery,true);
-        System.out.println("Tailmap, Narrowed: (takesparams)" + mapToString(tailMapNarrowedMore));
+        // NavigableMap<String, String> tailMapNarrowedMore = tailMap.tailMap(artistQuery,true);
+        // System.out.println("Tailmap, Narrowed: (takesparams)" + mapToString(tailMapNarrowedMore));
 
 
         // Now just add tailmap to the 2D array
@@ -321,6 +321,12 @@ public class SongCollection {
             arr2D[k][1] = tailMap.get(title); // artist
             k++;
         }
+
+        System.out.println("Private songsTree = " + mapToString(songsTree));
+
+        Map<String, String> songsTreeNarrow = songsTree.tailMap(artistQuery, true);
+
+        System.out.println("Private songsTreeNarrow now = " + mapToString(songsTreeNarrow));
 
         System.out.println("Arr2D " + arr2D);
 
