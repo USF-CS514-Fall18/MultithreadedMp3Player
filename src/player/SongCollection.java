@@ -318,7 +318,7 @@ public class SongCollection {
 
 
 
-        SortedMap<String, String> tailMapNarrowed = new TreeMap<>();
+        TreeMap<String, String> tailMapNarrowed = new TreeMap<>();
 
 
         for (String title : tailMap.keySet()) {
