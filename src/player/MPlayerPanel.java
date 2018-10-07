@@ -39,9 +39,6 @@ public class MPlayerPanel extends JPanel {
 
     private Song songCurrent; // I added this
 
-    //private String artistNameQuery = ""; // I added this - for searching for artist name
-
-
     JPanel topPanel, bottomPanel;
     JScrollPane centerPanel;
 
@@ -111,7 +108,6 @@ public class MPlayerPanel extends JPanel {
 
         // file chooser: set the default directory to the current directory
         fc.setCurrentDirectory(new File("."));
-
     }
 
     /** Shows songs in the table */
@@ -122,21 +118,16 @@ public class MPlayerPanel extends JPanel {
         // FILL IN CODE:
 
         if (artistQuery.equals("")) {
-
             titleArtistArray2D = songCollection.createTableElems(); // a String[][] array (2D)
         }
         else {
             titleArtistArray2D = songCollection.createTableElems(artistQuery); // Takes artist query
-
         }
 
         String[] columnNames = { "Title", "Artist" };
-
         table = new JTable(titleArtistArray2D, columnNames);
         centerPanel.getViewport().add(table);
-
         updateUI(); // needed?
-
     }
 
     /** A inner listener class for buttons and textfields **/
@@ -180,7 +171,6 @@ public class MPlayerPanel extends JPanel {
                 String filename = songCurrent.getFilename();
                 currThread = new PlayerThread(filename);
                 currThread.start();
-
 
             } else if (e.getSource() == stopButton) { // to stop the song
                 // FILL IN CODE
@@ -250,7 +240,5 @@ public class MPlayerPanel extends JPanel {
                 e.getMessage();
             }
         }
-
-
     }
 }
