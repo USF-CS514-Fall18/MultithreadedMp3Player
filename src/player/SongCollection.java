@@ -190,8 +190,9 @@ public class SongCollection {
                         Song newSong = new Song(p.toString()); // Create a new song object.
                         String newSongTitle = newSong.getTitle();
                         String newSongArtist = newSong.getArtist();
-                        
-                        songsTree.put(newSongTitle, newSongArtist);
+
+                        // This did not work because identical keys were overwritten.
+                        // songsTree.put(newSongArtist, newSongTitle);  // Adding <Artist, Title> to a TreeMap named songsTree
 
                         if (songs.containsKey(newSong.getArtist())) {
                             // Artist has already been added. Add new entry to existing "small" map.
@@ -253,14 +254,15 @@ public class SongCollection {
             for (String title : songs.get(artist).keySet()) {
                 arr2D[k][0] = title;
                 arr2D[k][1] = artist;
-
-                //songsTree.put(title, artist);
-
                 k++;
             }
         }
-        
-        
+
+        SortedMap<String, String> tailMap = songsTree.tailMap("");
+
+        System.out.println("Tailmap: (1)" + mapToString(tailMap));
+
+
 
         //System.out.println("Songs tree: () " + songsTree.toString());
 
@@ -302,13 +304,16 @@ public class SongCollection {
                 for (String title : songs.get(artist).keySet()) {
                     arr2D[k][0] = title;
                     arr2D[k][1] = artist;
-
-                    //songsTree.put(title, artist);
-
                     k++;
                 }
             }
         }
+
+        String test = "Fwdslxsh";
+
+        SortedMap<String, String> tailMap = songsTree.tailMap(test, true);
+
+        System.out.println("Tailmap: (2)" + mapToString(tailMap));
 
 //        System.out.println("Songs tree: (takes artistQuery) " + songsTree.toString());
 //
@@ -325,6 +330,14 @@ public class SongCollection {
 
 
         return arr2D;
+    }
+
+    public String mapToString(Map<String, String> tm) {
+        String out = "";
+        for (String s : tm.keySet()) {
+            out += s + ": " + tm.get(s) + System.lineSeparator();;
+        }
+        return out;
     }
 
     /**
